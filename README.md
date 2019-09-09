@@ -2,7 +2,7 @@
 
 This app demonstrates the interaction of a Symfony backend and Gatsby frontend.
 
-A list of series is provided as a REST endpoint via Symfony. Clicking the **Publish** button in the Symfony backend will start the Gatsby build process, which in turn uses the REST endpoint to dynamically generate Gatsby pages.
+A list of series is provided as a REST endpoint via Symfony. Clicking the **Publish** button in the Symfony backend will start the Gatsby build process, which in turn uses the REST endpoint to dynamically generate details pages for each series.
 
 ## Setup
 
