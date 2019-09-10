@@ -9,7 +9,7 @@ A list of series is provided as a REST endpoint via Symfony. Clicking the **Publ
 Prerequisites
 
 - Install PHP
-- Make sure you can run a **Makefile** from the command line (https://www.gnu.org/software/make/)
+- Make sure you can run a Makefile from the command line (https://www.gnu.org/software/make/)
 - Install Composer: https://getcomposer.org/download/
 - Install Symfony CLI: https://symfony.com/download
 - Install Node.js and NPM: https://nodejs.org/en/download/

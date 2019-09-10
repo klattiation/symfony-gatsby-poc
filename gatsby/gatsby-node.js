@@ -12,7 +12,7 @@ const BACKEND_URL = "http://localhost:9001/api"
 
 const encrypt = value => MD5(JSON.stringify(value)).toString()
 
-const getSeries = () => axios.get(`${BACKEND_URL}/series`)
+const getSeries = () => axios.get(`${BACKEND_URL}/shows`)
 
 exports.sourceNodes = async ({ actions }) => {
   const { createNode } = actions
@@ -22,9 +22,7 @@ exports.sourceNodes = async ({ actions }) => {
         console.log("> Resolve series", JSON.stringify(data, null, 2))
         data.forEach(show => {
           createNode({
-            id: show.id,
-            name: show.name,
-            url: show.url,
+            ...show,
             parent: null,
             children: [],
             internal: {
