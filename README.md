@@ -1,15 +1,9 @@
-# Gatsby Symfony - Prove of concept
-
-This app demonstrates the interaction of a Symfony backend and Gatsby frontend.
-
-A list of series is provided as a REST endpoint via Symfony. Clicking the **Publish** button in the Symfony backend will start the Gatsby build process, which in turn uses the REST endpoint to dynamically generate details pages for each series.
+# AdB - Virtual Academy
 
 ## Setup
 
 Prerequisites
 
-- Install PHP
-- Make sure you can run a Makefile from the command line (https://www.gnu.org/software/make/)
 - Install Composer: https://getcomposer.org/download/
 - Install Symfony CLI: https://symfony.com/download
 - Install Node.js and NPM: https://nodejs.org/en/download/
@@ -23,28 +17,40 @@ make setup
 
 ## Development
 
-### Start the app
+### Start frontend with mockserver
 
 ```console
-make start
+cd gatsby
+npm run mockserver
+npm start
 ```
 
-This will start a Node.js server running Gatsby on port 9000 and a PHP server running Symfony on port 9001.
+This will start a node.js mock server on port 3000. The frontend will be built using this server. After the build process, the frontend will be available on port 8000.
 
-- Backend: http://localhost:9001
-- Frontend: http://localhost:9000
+_Note: It's inevitable to start the mock server before building the frontend, because the build process uses the mock server to generate all the static sites._
 
-### Stop the app
+http://localhost:8000
+
+### Build the frontend
+
+Build using the mockserver:
 
 ```console
-make stop
+cd gatsby
+npm run mockserver
+npm run build
+```
+
+Build using the backend API:
+
+```
+// TODO...
 ```
 
 ## Further Links
 
-- [Symfony setup](https://symfony.com/doc/current/setup.html)
 - [Using Gatsby for a web app with dynamic content — A case study](https://blog.hasura.io/building-a-dynamic-listing-web-app-with-pagination-and-dynamic-pages-using-gatsby-2ddee9ec2dc3/)
 
 ## License
 
-MIT
+See [LICENSE](gatsby/LICENSE) file.

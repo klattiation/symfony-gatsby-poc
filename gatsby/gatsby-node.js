@@ -7,27 +7,29 @@
 const axios = require("axios")
 const MD5 = require("crypto-js/md5")
 const path = require("path")
+const get = require("lodash/get")
 
-const BACKEND_URL = "http://localhost:9001/api"
+const BACKEND_URL = "http://localhost:3000"
 
 const encrypt = value => MD5(JSON.stringify(value)).toString()
 
-const getSeries = () => axios.get(`${BACKEND_URL}/shows`)
+const getMedias = () => axios.get(`${BACKEND_URL}/medias`)
 
 exports.sourceNodes = async ({ actions }) => {
   const { createNode } = actions
   return new Promise((resolve, reject) => {
-    getSeries()
+    getMedias()
       .then(({ data }) => {
-        console.log("> Resolve series", JSON.stringify(data, null, 2))
-        data.forEach(show => {
+        const medias = get(data, "medias", [])
+        console.log("> Resolve medias", medias.length)
+        medias.forEach(media => {
           createNode({
-            ...show,
+            ...media,
             parent: null,
             children: [],
             internal: {
-              type: `Series`,
-              contentDigest: encrypt(show),
+              type: `Media`,
+              contentDigest: encrypt(media),
             },
           })
         })
@@ -46,24 +48,24 @@ exports.createPages = ({ graphql, actions }) => {
   return new Promise((resolve, reject) => {
     graphql(`
       {
-        allSeries {
+        allMedia {
           edges {
             node {
               id
-              url
+              path
             }
           }
         }
       }
     `)
       .then(({ data }) => {
-        console.log("> Create series pages", JSON.stringify(data, null, 2))
-        data.allSeries.edges.forEach(({ node }) => {
+        console.log("> Create medias pages", data.allMedia.edges.length)
+        data.allMedia.edges.forEach(({ node }) => {
           createPage({
-            path: node.url,
-            component: path.resolve(`./src/templates/series-details.js`),
+            path: node.path,
+            component: path.resolve(`./src/templates/media-details.js`),
             context: {
-              seriesId: node.id,
+              mediaId: node.id,
             },
           })
         })

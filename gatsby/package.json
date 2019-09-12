@@ -1,12 +1,11 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "adb-virtual-academy",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "The Adb Virtual Academy web application.",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Sascha Klatt",
   "dependencies": {
     "axios": "^0.19.0",
-    "crypto-js": "^3.1.9-1",
     "gatsby": "^2.15.11",
     "gatsby-image": "^2.2.17",
     "gatsby-plugin-manifest": "^2.2.15",
@@ -15,31 +14,33 @@
     "gatsby-plugin-sharp": "^2.2.20",
     "gatsby-source-filesystem": "^2.1.21",
     "gatsby-transformer-sharp": "^2.2.13",
+    "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-helmet": "^5.2.1"
   },
   "devDependencies": {
+    "casual": "^1.6.2",
+    "crypto-js": "^3.1.9-1",
+    "json-server": "^0.15.1",
     "prettier": "^1.18.2"
   },
-  "keywords": [
-    "gatsby"
-  ],
-  "license": "MIT",
+  "license": "LicenseRef-LICENSE",
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
+    "mockserver": "json-server --watch mocks/index.js",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \""
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://gitlab.com/robole/knick-design/adb-virtual-academy.git"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://redmine.robole.de/projects/adb-virtual-academy"
   }
 }

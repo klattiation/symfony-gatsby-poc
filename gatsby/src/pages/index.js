@@ -1,14 +1,14 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 import Layout from "../components/layout"
 
 export default ({ data }) => (
   <Layout>
-    <h1>All my series</h1>
+    <h1>All medias</h1>
     <ul>
-      {data.allSeries.edges.map(({ node }) => (
+      {data.allMedia.edges.map(({ node }) => (
         <li key={node.id}>
-          <Link to={node.url}>{node.name}</Link>
+          <Link to={node.path}>{node.content.title}</Link>
         </li>
       ))}
     </ul>
@@ -17,12 +17,14 @@ export default ({ data }) => (
 
 export const query = graphql`
   query {
-    allSeries {
+    allMedia {
       edges {
         node {
           id
-          name
-          url
+          content {
+            title
+          }
+          path
         }
       }
     }
