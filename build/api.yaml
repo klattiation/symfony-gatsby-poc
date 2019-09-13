@@ -24,44 +24,8 @@ paths:
     get:
       tags:
         - tags
-      summary: Lists all tags.
+      summary: Get tags
       description: Returns a list of all tags. Is used to generate a list of all tags in the filter section of the **media overview** page.
-      responses:
-        "200":
-          description: Successful operation.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Tag"
-
-  /authors:
-    get:
-      tags:
-        - authors
-      summary: List authors
-      description: Returns a list of all authors with basic or detailed information. It is used to generate the **author details** pages, to show a list of authors in the **authors overview** page, to lazy-load authors in the **module details** page and to populate the authors dropdown filter in the **media overview** page.
-      parameters:
-        - name: moduleId
-          in: query
-          description: If present, list only entities of the respective module.
-          required: false
-          schema:
-            type: integer
-        - name: page
-          in: query
-          description: If present, list only entities of the respective page.
-          required: false
-          schema:
-            type: integer
-        - name: details
-          in: query
-          description: If present, list entities with detailed data instead of preview data.
-          required: false
-          schema:
-            type: boolean
-          allowEmptyValue: true
       responses:
         "200":
           description: Successful operation.
@@ -70,17 +34,38 @@ paths:
               schema:
                 type: object
                 properties:
-                  pageNum:
-                    type: integer
-                    nullable: true
-                  authorsPreview:
+                  data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/AuthorPreview"
-                  authors:
+                      $ref: "#/components/schemas/Tag"
+
+  /authors:
+    get:
+      tags:
+        - authors
+      summary: Get authors
+      description: Returns a list of all authors with basic or detailed information. It is used to generate the **author details** pages, to show a list of authors in the **authors overview** page and to lazy-load authors in the **module details** page.
+      parameters:
+        - $ref: "#/components/parameters/filterModule"
+        - $ref: "#/components/parameters/pageOffset"
+        - $ref: "#/components/parameters/showDetails"
+
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+                  data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Author"
+                      oneOf:
+                        - $ref: "#/components/schemas/AuthorPreview"
+                        - $ref: "#/components/schemas/Author"
         "400":
           description: Invalid request.
           content:
@@ -92,7 +77,7 @@ paths:
     get:
       tags:
         - modules
-      summary: List all modules
+      summary: Get modules
       description: Returns a list of all modules with detailed information. It is used to generate the **module details** pages.
       responses:
         "200":
@@ -102,7 +87,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  modules:
+                  data:
                     type: array
                     items:
                       $ref: "#/components/schemas/Module"
@@ -111,62 +96,17 @@ paths:
     get:
       tags:
         - medias
-      summary: Lists media items
+      summary: Get medias
       description: Returns a list of all media items with basic or detailed information. It is used to generate the **media details** pages and to lazy-load preview cards on the **home**, **media overview**, **module details** and **author details** page. Results can be filtered by author, module, chapter and tags.
       parameters:
-        - name: authorId
-          in: query
-          description: If present, list only entities of the respective author.
-          required: false
-          schema:
-            type: integer
-        - name: moduleId
-          in: query
-          description: If present, list only entities of the respective module.
-          required: false
-          schema:
-            type: integer
-        - name: chapterId
-          in: query
-          description: If present, list only entities of the respective chapter.
-          required: false
-          schema:
-            type: integer
-        - name: tags
-          in: query
-          description: If present, list only entities that are associated with the respective tags.
-          required: false
-          schema:
-            type: array
-            items:
-              type: integer
-        - name: page
-          in: query
-          description: If present, list only entities of the respective page.
-          required: false
-          schema:
-            type: integer
-        - name: sort
-          in: query
-          description: Sort field.
-          required: false
-          schema:
-            type: string
-            enum: [title, date]
-        - name: order
-          in: query
-          description: Sort order.
-          required: false
-          schema:
-            type: string
-            enum: [asc, desc]
-        - name: details
-          in: query
-          description: If present, list medias with detailed data instead of preview data.
-          required: false
-          schema:
-            type: boolean
-          allowEmptyValue: true
+        - $ref: "#/components/parameters/filterAuthor"
+        - $ref: "#/components/parameters/filterModule"
+        - $ref: "#/components/parameters/filterChapterType"
+        - $ref: "#/components/parameters/filterTags"
+        - $ref: "#/components/parameters/sortField"
+        - $ref: "#/components/parameters/sortOrder"
+        - $ref: "#/components/parameters/pageOffset"
+        - $ref: "#/components/parameters/showDetails"
       responses:
         "200":
           description: Successful operation.
@@ -175,19 +115,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  pageNum:
-                    type: integer
-                    nullable: true
-                  mediasPreview:
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+                  data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/MediaPreview"
-                    nullable: true
-                  medias:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Media"
-                    nullable: true
+                      oneOf:
+                        - $ref: "#/components/schemas/MediaPreview"
+                        - $ref: "#/components/schemas/Media"
         "400":
           description: Invalid request
           content:
@@ -198,7 +133,7 @@ paths:
       tags:
         - medias
         - forms
-      summary: Creates a new media item
+      summary: Submit media
       description: Will be submitted with the "Einreichen" form. It creates a new media item along with new authors (person or organisation). The newly created items won't be visible in the frontend but saved for approval by the respective content managers.
       requestBody:
         $ref: "#/components/requestBodies/Media"
@@ -236,7 +171,7 @@ paths:
     post:
       tags:
         - forms
-      summary: Creates a contact request
+      summary: Submit contact
       description: Is submitted with the contact form on the "About & Kontakt" page.
       requestBody:
         $ref: "#/components/requestBodies/Contact"
@@ -254,7 +189,7 @@ paths:
     post:
       tags:
         - forms
-      summary: Creates a suggestion.
+      summary: Submit suggestion
       description: Is submitted with the "Anregungen und Vorschläge" form on the module details page.
       requestBody:
         $ref: "#/components/requestBodies/Suggestion"
@@ -272,7 +207,7 @@ paths:
     get:
       tags:
         - pages
-      summary: Lists all core pages
+      summary: Get pages
       description: Lists **all core pages**, excluding author, media and module details pages. This endpoint is used during the frontend build process to fetch the data for all core pages in one request.
       responses:
         "200":
@@ -280,15 +215,18 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/CorePage"
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CorePage"
 
   /pages/home:
     get:
       tags:
         - pages
-      summary: Start Page
+      summary: Get home page
       description: Get the path, seo and content data of the start page, including all modules and latest medias as preview to generate the static site.
       responses:
         "200":
@@ -298,37 +236,34 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                    example: "home"
-                  path:
-                    type: string
-                    example: "/"
-                  seo:
-                    $ref: "#/components/schemas/PageSeo"
-                  content:
-                    type: object
-                    properties:
-                      title:
-                        type: string
-                        example: "Entwurf “Fotogrtafie und Weißraum”"
-                      description:
-                        type: string
-                        example: "Dominierende Elemente des Entwurfs sind markante Fotos und klare Typografie in übersichtlichen Kompositionen, die an ein Magazin-Layout erinnert. Jedes Thema..."
-                      modulesPreview:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/ModulePreview"
-                      mediasPreview:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/MediaPreview"
+                  data:
+                    allOf:
+                      - $ref: "#/components/schemas/CorePage"
+                      - type: object
+                        properties:
+                          content:
+                            type: object
+                            properties:
+                              title:
+                                type: string
+                                example: "Entwurf “Fotogrtafie und Weißraum”"
+                              description:
+                                type: string
+                                example: "Dominierende Elemente des Entwurfs sind markante Fotos und klare Typografie in übersichtlichen Kompositionen, die an ein Magazin-Layout erinnert. Jedes Thema..."
+                              modulesPreview:
+                                type: array
+                                items:
+                                  $ref: "#/components/schemas/ModulePreview"
+                              mediasPreview:
+                                type: array
+                                items:
+                                  $ref: "#/components/schemas/MediaPreview"
 
   /pages/medias:
     get:
       tags:
         - pages
-      summary: Medias Overview Page
+      summary: Get media page
       description: Get the path, seo and content of the media overview page. The content includes all authors, modules and chapters with preview data as well as all tags to generate the filter section. Also all medias that should be visible when the page loads are provided as preview data.
       responses:
         "200":
@@ -338,46 +273,43 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                    example: "medias-overview"
-                  path:
-                    type: string
-                    example: "/medias"
-                  seo:
-                    $ref: "#/components/schemas/PageSeo"
-                  content:
-                    type: object
-                    properties:
-                      title:
-                        type: string
-                        example: "Mediaübersicht"
-                      authorsPreview:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/AuthorPreview"
-                      modulesPreview:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/ModulePreview"
-                      chaptersPreview:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/ChapterPreview"
-                      mediasPreview:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/MediaPreview"
-                      tags:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/Tag"
+                  data:
+                    allOf:
+                      - $ref: "#/components/schemas/CorePage"
+                      - type: object
+                        properties:
+                          content:
+                            type: object
+                            properties:
+                              title:
+                                type: string
+                                example: "Mediaübersicht"
+                              authorsPreview:
+                                type: array
+                                items:
+                                  $ref: "#/components/schemas/AuthorPreview"
+                              modulesPreview:
+                                type: array
+                                items:
+                                  $ref: "#/components/schemas/ModulePreview"
+                              chaptersPreview:
+                                type: array
+                                items:
+                                  $ref: "#/components/schemas/ChapterPreview"
+                              mediasPreview:
+                                type: array
+                                items:
+                                  $ref: "#/components/schemas/MediaPreview"
+                              tags:
+                                type: array
+                                items:
+                                  $ref: "#/components/schemas/Tag"
 
   /pages/authors:
     get:
       tags:
         - pages
-      summary: Authors Overview Page
+      summary: Get authors page
       description: Get the path and content of the author overview page.
       responses:
         "200":
@@ -387,26 +319,23 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                    example: "authors-overview"
-                  path:
-                    type: string
-                    example: "/autoren"
-                  seo:
-                    $ref: "#/components/schemas/PageSeo"
-                  content:
-                    type: object
-                    properties:
-                      title:
-                        type: string
-                        example: "Autorenübersicht"
+                  data:
+                    allOf:
+                      - $ref: "#/components/schemas/CorePage"
+                      - type: object
+                        properties:
+                          content:
+                            type: object
+                            properties:
+                              title:
+                                type: string
+                                example: "Autorenübersicht"
 
   /pages/about:
     get:
       tags:
         - pages
-      summary: About Us Page
+      summary: Get about page
       description: Get the path and content of the about us page.
       responses:
         "200":
@@ -416,40 +345,37 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                    example: "about"
-                  path:
-                    type: string
-                    example: "/ueber-uns"
-                  seo:
-                    $ref: "#/components/schemas/PageSeo"
-                  content:
-                    type: object
-                    properties:
-                      title:
-                        type: string
-                        example: "Über uns"
-                      description:
-                        type: string
-                        example: "Lorem ipsum dolor sit amet, consetetur..."
-                      team:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            name:
-                              type: string
-                              example: "Max Mustermann"
-                            imagePath:
-                              type: string
-                              example: "/assets/img/maxmustermann.jpg"
+                  data:
+                    allOf:
+                      - $ref: "#/components/schemas/CorePage"
+                      - type: object
+                        properties:
+                          content:
+                            type: object
+                            properties:
+                              title:
+                                type: string
+                                example: "Über uns"
+                              description:
+                                type: string
+                                example: "Lorem ipsum dolor sit amet, consetetur..."
+                              team:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                      example: "Max Mustermann"
+                                    imagePath:
+                                      type: string
+                                      example: "/assets/img/maxmustermann.jpg"
 
   /pages/imprint:
     get:
       tags:
         - pages
-      summary: Imprint Page
+      summary: Get imprint page
       description: Get the path and content of the imprint page.
       responses:
         "200":
@@ -459,29 +385,26 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                    example: "imprint"
-                  path:
-                    type: string
-                    example: "/impressum"
-                  seo:
-                    $ref: "#/components/schemas/PageSeo"
-                  content:
-                    type: object
-                    properties:
-                      title:
-                        type: string
-                        example: "Impressum"
-                      description:
-                        type: string
-                        example: "Freitext lorem ipsum..."
+                  data:
+                    allOf:
+                      - $ref: "#/components/schemas/CorePage"
+                      - type: object
+                        properties:
+                          content:
+                            type: object
+                            properties:
+                              title:
+                                type: string
+                                example: "Impressum"
+                              description:
+                                type: string
+                                example: "Freitext lorem ipsum..."
 
   /pages/privacy:
     get:
       tags:
         - pages
-      summary: Privacy Policy Page
+      summary: Get privacy page
       description: Get the path and content of the privacy policy page.
       responses:
         "200":
@@ -491,23 +414,20 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                    example: "privacy"
-                  path:
-                    type: string
-                    example: "/datenschutz"
-                  seo:
-                    $ref: "#/components/schemas/PageSeo"
-                  content:
-                    type: object
-                    properties:
-                      title:
-                        type: string
-                        example: "Datenschutz"
-                      description:
-                        type: string
-                        example: "Freitext lorem ipsum..."
+                  data:
+                    allOf:
+                      - $ref: "#/components/schemas/CorePage"
+                      - type: object
+                        properties:
+                          content:
+                            type: object
+                            properties:
+                              title:
+                                type: string
+                                example: "Datenschutz"
+                              description:
+                                type: string
+                                example: "Freitext lorem ipsum..."
 
 components:
   schemas:
@@ -656,7 +576,7 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
         content:
           type: object
           properties:
@@ -680,7 +600,7 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/AuthorPreview"
-            chaptersPreview:
+            chapters:
               type: array
               items:
                 $ref: "#/components/schemas/Chapter"
@@ -711,7 +631,7 @@ components:
           type: string
           example: "/modul/demokratie"
 
-    Chapter:
+    ChapterType:
       type: object
       properties:
         id:
@@ -720,6 +640,14 @@ components:
           type: string
         description:
           type: string
+
+    Chapter:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          $ref: "#/components/schemas/ChapterType"
         mediasPreview:
           type: array
           items:
@@ -802,6 +730,18 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/MetaTag"
+
+    Pagination:
+      type: object
+      properties:
+        next:
+          type: integer
+        prev:
+          type: integer
+        first:
+          type: integer
+        last:
+          type: integer
 
   requestBodies:
     Contact:
@@ -893,6 +833,83 @@ components:
                   $ref: "#/components/schemas/Tag"
       description: Media object that needs to be submitted.
       required: true
+
+  parameters:
+    pageOffset:
+      name: page
+      in: query
+      description: If present, list only entities for the respective page number.
+      required: false
+      example: 1
+      schema:
+        type: integer
+        minimum: 0
+
+    showDetails:
+      name: details
+      in: query
+      description: If present, list medias with detailed data instead of preview data.
+      required: false
+      example: true
+      schema:
+        type: boolean
+      allowEmptyValue: true
+
+    filterModule:
+      name: module
+      in: query
+      description: If present, list only entities related to the respective module.
+      required: false
+      example: "1"
+      schema:
+        type: string
+
+    filterAuthor:
+      name: author
+      in: query
+      description: If present, list only entities related to the respective author.
+      required: false
+      example: "1"
+      schema:
+        type: string
+
+    filterChapterType:
+      name: chapter_type
+      in: query
+      description: If present, list only entities related to the respective chapter.
+      required: false
+      example: "1"
+      schema:
+        type: string
+
+    filterTags:
+      name: tags
+      in: query
+      description: If present, list only entities that are related to the respective tags.
+      required: false
+      example: ["1", "9", "16"]
+      schema:
+        type: array
+        items:
+          type: string
+
+    sortField:
+      name: sort_field
+      in: query
+      description: Sort field.
+      required: false
+      schema:
+        type: string
+        enum: [title, date]
+
+    sortOrder:
+      name: sort_order
+      in: query
+      description: Sort order.
+      required: false
+      schema:
+        type: string
+        enum: [asc, desc]
 
 # Added by API Auto Mocking Plugin
 servers:

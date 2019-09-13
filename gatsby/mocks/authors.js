@@ -1,7 +1,7 @@
 const casual = require("casual").de_DE
 const lowerCase = require("lodash/lowerCase")
 
-module.exports = (count = 20) => {
+module.exports = ({ count = 20 }) => {
   casual.define("author", function() {
     const id = casual.uuid
     const firstName = casual.first_name
@@ -24,8 +24,6 @@ module.exports = (count = 20) => {
         instagramId: `https://instagram.com/${lowerCase(firstName)}.${lowerCase(lastName)}`,
         facebookId: `https://facebook.com/${casual.uuid}`,
         imagePath: `images/${id}.jpg`,
-        mediasPreview: [],
-        modulesPreview: [],
         path: `/authors/${lowerCase(firstName)}-${lowerCase(lastName)}`,
       },
       seo: {

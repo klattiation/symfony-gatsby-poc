@@ -7,10 +7,9 @@ const modules = [
       name: "Demokratie",
       subline: "Radikalisiert euch",
       description: casual.description,
+      imagePath: "/images/modul-demokratie.jpg",
       vimeoId: casual.uuid,
       authorsDescription: casual.description,
-      authorsPreview: [],
-      chaptersPreview: [],
     },
     path: "/modul/demokratie",
     seo: {
@@ -29,16 +28,17 @@ const modules = [
   },
   {
     id: casual.uuid,
-    name: "Religion",
-    subline: "Radikalisiert euch",
-    description: casual.description,
-    vimeoId: casual.uuid,
-    authorsDescription: casual.description,
-    authorsPreview: [],
-    chaptersPreview: [],
-    path: "/modul/religion",
+    content: {
+      name: "Religionen",
+      subline: "Subline zu Religionen",
+      description: casual.description,
+      imagePath: "/images/modul-religionen.jpg",
+      vimeoId: casual.uuid,
+      authorsDescription: casual.description,
+    },
+    path: "/modul/religionen",
     seo: {
-      title: "Virtual Academy - Religion",
+      title: "Virtual Academy - Religionen",
       metaTags: [
         {
           property: "description",
@@ -46,7 +46,57 @@ const modules = [
         },
         {
           property: "og:title",
-          content: "Virtual Academy - Demokratie",
+          content: "Virtual Academy - Relgionen",
+        },
+      ],
+    },
+  },
+  {
+    id: casual.uuid,
+    content: {
+      name: "Rassismus",
+      subline: "Subline zu Rassismus",
+      description: casual.description,
+      imagePath: "/images/modul-rassismus.jpg",
+      vimeoId: casual.uuid,
+      authorsDescription: casual.description,
+    },
+    path: "/modul/rassismus",
+    seo: {
+      title: "Virtual Academy - Rassismus",
+      metaTags: [
+        {
+          property: "description",
+          content: casual.description,
+        },
+        {
+          property: "og:title",
+          content: "Virtual Academy - Rassismus",
+        },
+      ],
+    },
+  },
+  {
+    id: casual.uuid,
+    content: {
+      name: "Rassismus",
+      subline: "Subline zu Diversität",
+      description: casual.description,
+      imagePath: "/images/modul-diversitaet.jpg",
+      vimeoId: casual.uuid,
+      authorsDescription: casual.description,
+    },
+    path: "/modul/diversitaet",
+    seo: {
+      title: "Virtual Academy - Diversität",
+      metaTags: [
+        {
+          property: "description",
+          content: casual.description,
+        },
+        {
+          property: "og:title",
+          content: "Virtual Academy - Diversität",
         },
       ],
     },
