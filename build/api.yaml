@@ -17,7 +17,7 @@ tags:
   - name: forms
     description: Form submissions
   - name: pages
-    description: "Path and content for all **basic pages**, excluding details pages for authors, modules and medias."
+    description: "Path, seo and content for all **core pages**, excluding details pages for authors, modules and medias."
 
 paths:
   /tags:
@@ -216,8 +216,8 @@ paths:
     get:
       tags:
         - medias
-      summary: Download selected medias
-      description: Downloads either a single media item or a list of media items as a ZIP file.
+      summary: Downloads medias
+      description: Downloads either a single media or a list of medias as a ZIP file.
       parameters:
         - name: medias
           in: query
@@ -268,12 +268,28 @@ paths:
               schema:
                 $ref: "#/components/schemas/BadRequest"
 
+  /pages:
+    get:
+      tags:
+        - pages
+      summary: Lists all core pages
+      description: Lists **all core pages**, excluding author, media and module details pages. This endpoint is used during the frontend build process to fetch the data for all core pages in one request.
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CorePage"
+
   /pages/home:
     get:
       tags:
         - pages
       summary: Start Page
-      description: Get the path and content of the start page.
+      description: Get the path, seo and content data of the start page, including all modules and latest medias as preview to generate the static site.
       responses:
         "200":
           description: Successful operation.
@@ -299,13 +315,21 @@ paths:
                       description:
                         type: string
                         example: "Dominierende Elemente des Entwurfs sind markante Fotos und klare Typografie in übersichtlichen Kompositionen, die an ein Magazin-Layout erinnert. Jedes Thema..."
+                      modulesPreview:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/ModulePreview"
+                      mediasPreview:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/MediaPreview"
 
-  /pages/medias-overview:
+  /pages/medias:
     get:
       tags:
         - pages
       summary: Medias Overview Page
-      description: Get the path and content of the media overview page.
+      description: Get the path, seo and content of the media overview page. The content includes all authors, modules and chapters with preview data as well as all tags to generate the filter section. Also all medias that should be visible when the page loads are provided as preview data.
       responses:
         "200":
           description: Successful operation.
@@ -340,12 +364,16 @@ paths:
                         type: array
                         items:
                           $ref: "#/components/schemas/ChapterPreview"
+                      mediasPreview:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/MediaPreview"
                       tags:
                         type: array
                         items:
                           $ref: "#/components/schemas/Tag"
 
-  /pages/authors-overview:
+  /pages/authors:
     get:
       tags:
         - pages
@@ -640,6 +668,9 @@ components:
               example: Radikalisiert euch!
             description:
               type: string
+            imagePath:
+              type: string
+              example: "/images/module-x.jpg"
             vimeoId:
               type: string
               example: "oa12af34"
@@ -673,6 +704,9 @@ components:
             subline:
               type: string
               example: Radikalisiert euch!
+            imagePath:
+              type: string
+              example: "/images/module-x.jpg"
         path:
           type: string
           example: "/modul/demokratie"
@@ -744,6 +778,19 @@ components:
         content:
           type: string
           example: "This is the home of the Adb Virtual Academy."
+
+    CorePage:
+      type: object
+      properties:
+        id:
+          type: string
+        path:
+          type: string
+          example: "/medias"
+        seo:
+          $ref: "#/components/schemas/PageSeo"
+        content:
+          type: object
 
     PageSeo:
       type: object
