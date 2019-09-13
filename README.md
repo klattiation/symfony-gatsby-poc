@@ -17,7 +17,9 @@ make setup
 
 ## Development
 
-### Start frontend with mockserver
+### Start frontend
+
+With the mock server API:
 
 ```console
 cd gatsby
@@ -25,15 +27,19 @@ npm run mockserver
 npm start
 ```
 
-This will start a node.js mock server on port 3000. The frontend will be built using this server. After the build process, the frontend will be available on port 8000.
+This will start a node.js mock server on port 3000. The frontend will be built using this server. After the build process, the frontend will be available at http://localhost:8000.
 
 _Note: It's inevitable to start the mock server before building the frontend, because the build process uses the mock server to generate all the static sites._
 
-http://localhost:8000
+With the backend API:
 
-### Build the frontend
+```
+// TODO...
+```
 
-Build using the mockserver:
+### Build the frontend for production
+
+At the moment, the frontend can be built using the mock server API (backend API is not implemented yet):
 
 ```console
 cd gatsby
@@ -41,10 +47,12 @@ npm run mockserver
 npm run build
 ```
 
-Build using the backend API:
+This will build the frontend into the `/public` folder. This folder now contains a static frontend that can be deployed to any server.
+
+Running the following command will start a local server at http://localhost:9000 that runs the production-ready frontend:
 
 ```
-// TODO...
+npm run serve
 ```
 
 ## Further Links
