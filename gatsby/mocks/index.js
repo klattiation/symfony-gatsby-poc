@@ -1,12 +1,17 @@
 const { get, set, isEmpty, flatten } = require("lodash")
 const compose = require("lodash/fp/compose")
-const generateAuthors = require("./authors.js")
-const generateMedias = require("./medias.js")
-const generateModules = require("./modules.js")
-const generatePages = require("./pages.js")
-const generateTags = require("./tags.js")
-const generateChapterTypes = require("./chapterTypes.js")
-const generateChaptersPerModule = require("./chapters.js")
+const generateAuthors = require("./authors")
+const generateMedias = require("./medias")
+const generateModules = require("./modules")
+const generateTags = require("./tags")
+const generateChapterTypes = require("./chapterTypes")
+const generateChaptersPerModule = require("./chapters")
+const generatePageHome = require("./pages/home")
+const generatePageMedias = require("./pages/medias")
+const generatePageAuthors = require("./pages/authors")
+const generatePageAbout = require("./pages/about")
+const generatePageImprint = require("./pages/imprint")
+const generatePagePrivacy = require("./pages/privacy")
 const { randomEntries, randomIntBetween } = require("./_utils")
 
 const getId = entity => get(entity, "id")
@@ -40,11 +45,10 @@ const addPagination = obj => ({
 })
 
 module.exports = () => {
-  // generate entities in base format (unconnected)
+  // generate entities in base format (without relations)
   const mediasBase = generateMedias({ count: 100 })
   const authorsBase = generateAuthors({ count: 20 })
   const modulesBase = generateModules()
-  const pagesBase = generatePages()
   const tagsBase = generateTags({ count: 20 })
   const chapterTypes = generateChapterTypes()
   const chaptersPerModule = generateChaptersPerModule({
@@ -52,6 +56,20 @@ module.exports = () => {
     moduleCount: countModules(modulesBase),
   })
   const chaptersBase = flatten(chaptersPerModule)
+  const pageHomeBase = generatePageHome()
+  const pageMediasBase = generatePageMedias()
+  const pageAuthorsBase = generatePageAuthors()
+  const pageAboutBase = generatePageAbout()
+  const pageImprintBase = generatePageImprint()
+  const pagePrivacyBase = generatePagePrivacy()
+  const pagesBase = [
+    pageHomeBase,
+    pageMediasBase,
+    pageAuthorsBase,
+    pageAboutBase,
+    pageImprintBase,
+    pagePrivacyBase,
+  ]
 
   // extract ids
   const allAuthorIds = extractIds(authorsBase)
@@ -93,7 +111,7 @@ module.exports = () => {
     path: "content.chapters",
   })
 
-  // connect entities
+  // add relations and wrap
   return {
     authors: compose(
       addPagination,
@@ -101,7 +119,10 @@ module.exports = () => {
       addRandomMediaIds,
       addRandomModuleIds
     )(authorsBase),
-    chapters: wrapWithData(addRandomMediaIds(chaptersBase)),
+    chapters: compose(
+      wrapWithData,
+      addRandomMediaIds
+    )(chaptersBase),
     medias: compose(
       addPagination,
       wrapWithData,
