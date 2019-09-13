@@ -51,8 +51,5 @@ module.exports = ({ count = 100 }) => {
       },
     }
   })
-  return {
-    pageNum: 0,
-    medias: Array.from({ length: count }, () => casual.media),
-  }
+  return Array.from({ length: count }, () => casual.media)
 }

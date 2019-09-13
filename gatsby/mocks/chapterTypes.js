@@ -1,6 +1,6 @@
 const casual = require("casual").de_DE
 
-const chapterTypes = [
+module.exports = () => [
   {
     id: casual.uuid,
     name: "Hintergrund",
@@ -12,5 +12,3 @@ const chapterTypes = [
     description: casual.description,
   },
 ]
-
-module.exports = () => chapterTypes

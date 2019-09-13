@@ -41,9 +41,5 @@ module.exports = ({ count = 20 }) => {
       },
     }
   })
-  const authors = Array.from({ length: count }, () => casual.author)
-  return {
-    pageNum: 0,
-    authors,
-  }
+  return Array.from({ length: count }, () => casual.author)
 }

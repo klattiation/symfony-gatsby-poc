@@ -26,7 +26,18 @@ const makeChapterEnhancer = ({ chaptersPerModule, path }) => entities =>
     return set(src, path, entries)
   })
 
-const countModules = modulesBase => get(modulesBase, "modules.length", 0)
+const countModules = modulesBase => get(modulesBase, "length", 0)
+
+const wrapWithAttr = attr => obj => ({ [attr]: obj })
+
+const wrapWithData = wrapWithAttr("data")
+
+const addPagination = obj => ({
+  ...obj,
+  pagination: {
+    next: 1,
+  },
+})
 
 module.exports = () => {
   // generate entities in base format (unconnected)
@@ -43,9 +54,9 @@ module.exports = () => {
   const chaptersBase = flatten(chaptersPerModule)
 
   // extract ids
-  const allAuthorIds = extractIds(authorsBase.authors)
-  const allMediaIds = extractIds(mediasBase.medias)
-  const allModuleIds = extractIds(modulesBase.modules)
+  const allAuthorIds = extractIds(authorsBase)
+  const allMediaIds = extractIds(mediasBase)
+  const allModuleIds = extractIds(modulesBase)
   const allTagIds = extractIds(tagsBase)
 
   // make enhancer
@@ -84,30 +95,26 @@ module.exports = () => {
 
   // connect entities
   return {
-    authors: {
-      ...authorsBase,
-      authors: compose(
-        addRandomMediaIds,
-        addRandomModuleIds
-      )(authorsBase.authors),
-    },
-    chapters: addRandomMediaIds(chaptersBase),
-    medias: {
-      ...mediasBase,
-      medias: compose(
-        addRandomAuthorIds,
-        addRandomModuleIds,
-        addRandomTagIds
-      )(mediasBase.medias),
-    },
-    modules: {
-      ...modulesBase,
-      modules: compose(
-        addRandomAuthorIds,
-        addChapters
-      )(modulesBase.modules),
-    },
-    pages: pagesBase,
-    tags: tagsBase,
+    authors: compose(
+      addPagination,
+      wrapWithData,
+      addRandomMediaIds,
+      addRandomModuleIds
+    )(authorsBase),
+    chapters: wrapWithData(addRandomMediaIds(chaptersBase)),
+    medias: compose(
+      addPagination,
+      wrapWithData,
+      addRandomAuthorIds,
+      addRandomModuleIds,
+      addRandomTagIds
+    )(mediasBase),
+    modules: compose(
+      wrapWithData,
+      addRandomAuthorIds,
+      addChapters
+    )(modulesBase),
+    pages: wrapWithData(pagesBase),
+    tags: wrapWithData(tagsBase),
   }
 }

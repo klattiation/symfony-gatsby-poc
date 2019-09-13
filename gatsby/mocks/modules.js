@@ -103,6 +103,4 @@ const modules = [
   },
 ]
 
-module.exports = () => ({
-  modules,
-})
+module.exports = () => modules

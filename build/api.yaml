@@ -738,10 +738,6 @@ components:
           type: integer
         prev:
           type: integer
-        first:
-          type: integer
-        last:
-          type: integer
 
   requestBodies:
     Contact:
