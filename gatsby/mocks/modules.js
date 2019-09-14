@@ -1,6 +1,6 @@
 const casual = require("casual").de_DE
 
-const modules = [
+module.exports = () => [
   {
     id: casual.uuid,
     content: {
@@ -102,5 +102,3 @@ const modules = [
     },
   },
 ]
-
-module.exports = () => modules

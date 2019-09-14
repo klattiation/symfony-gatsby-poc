@@ -2,8 +2,8 @@ const casual = require("casual").de_DE
 const kebabCase = require("lodash/kebabCase")
 const { randomEntry, randomSizedArray } = require("rendum")
 
-module.exports = ({ count = 100 }) => {
-  return Array.from({ length: count }, () => {
+module.exports = ({ count = 100 }) =>
+  Array.from({ length: count }, () => {
     const id = casual.uuid
     const title = casual.title
     const seoTitle = `Virtual Academy - ${title}`
@@ -51,4 +51,3 @@ module.exports = ({ count = 100 }) => {
       },
     }
   })
-}

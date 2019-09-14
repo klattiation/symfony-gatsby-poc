@@ -1,8 +1,8 @@
 const casual = require("casual").de_DE
 const lowerCase = require("lodash/lowerCase")
 
-module.exports = ({ count = 20 }) => {
-  casual.define("author", function() {
+module.exports = ({ count = 20 }) =>
+  Array.from({ length: count }, () => {
     const id = casual.uuid
     const firstName = casual.first_name
     const lastName = casual.last_name
@@ -41,5 +41,3 @@ module.exports = ({ count = 20 }) => {
       },
     }
   })
-  return Array.from({ length: count }, () => casual.author)
-}

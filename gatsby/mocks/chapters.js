@@ -11,9 +11,7 @@ const generateChaptersPerModule = chapterTypes => [
   },
 ]
 
-module.exports = ({ moduleCount, chapterTypes }) => {
-  const chaptersPerModule = Array.from({ length: moduleCount }, () =>
+module.exports = ({ moduleCount, chapterTypes }) =>
+  Array.from({ length: moduleCount }, () =>
     generateChaptersPerModule(chapterTypes)
   )
-  return chaptersPerModule
-}
