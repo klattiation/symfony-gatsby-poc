@@ -1,7 +1,8 @@
 const casual = require("casual").de_DE
+const times = require("lodash/times")
 
 module.exports = ({ count = 100 }) =>
-  Array.from({ length: count }, () => ({
+  times(count, () => ({
     id: casual.uuid,
     title: casual.title,
   }))

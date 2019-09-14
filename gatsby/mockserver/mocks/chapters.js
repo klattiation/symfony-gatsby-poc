@@ -1,4 +1,5 @@
 const casual = require("casual").de_DE
+const times = require("lodash/times")
 
 const generateChaptersPerModule = chapterTypes => [
   {
@@ -12,6 +13,4 @@ const generateChaptersPerModule = chapterTypes => [
 ]
 
 module.exports = ({ moduleCount, chapterTypes }) =>
-  Array.from({ length: moduleCount }, () =>
-    generateChaptersPerModule(chapterTypes)
-  )
+  times(moduleCount, () => generateChaptersPerModule(chapterTypes))

@@ -842,7 +842,7 @@ components:
         minimum: 0
 
     showDetails:
-      name: details
+      name: _details
       in: query
       description: If present, list medias with detailed data instead of preview data.
       required: false
@@ -850,6 +850,24 @@ components:
       schema:
         type: boolean
       allowEmptyValue: true
+
+    sortField:
+      name: _sort
+      in: query
+      description: Sort field.
+      required: false
+      schema:
+        type: string
+        enum: [title, date]
+
+    sortOrder:
+      name: _order
+      in: query
+      description: Sort order.
+      required: false
+      schema:
+        type: string
+        enum: [asc, desc]
 
     filterModule:
       name: module
@@ -888,24 +906,6 @@ components:
         type: array
         items:
           type: string
-
-    sortField:
-      name: _sort
-      in: query
-      description: Sort field.
-      required: false
-      schema:
-        type: string
-        enum: [title, date]
-
-    sortOrder:
-      name: _order
-      in: query
-      description: Sort order.
-      required: false
-      schema:
-        type: string
-        enum: [asc, desc]
 
 # Added by API Auto Mocking Plugin
 servers:
