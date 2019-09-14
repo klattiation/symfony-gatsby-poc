@@ -33,17 +33,6 @@ const makeChapterEnhancer = ({ chaptersPerModule, path }) => entities =>
 
 const countModules = modulesBase => get(modulesBase, "length", 0)
 
-const wrapWithAttr = attr => obj => ({ [attr]: obj })
-
-const wrapWithData = wrapWithAttr("data")
-
-const addPagination = obj => ({
-  ...obj,
-  pagination: {
-    next: 1,
-  },
-})
-
 module.exports = () => {
   // generate entities in base format (without relations)
   const mediasBase = generateMedias({ count: 100 })
@@ -114,28 +103,20 @@ module.exports = () => {
   // add relations and wrap
   return {
     authors: compose(
-      addPagination,
-      wrapWithData,
       addRandomMediaIds,
       addRandomModuleIds
     )(authorsBase),
-    chapters: compose(
-      wrapWithData,
-      addRandomMediaIds
-    )(chaptersBase),
+    chapters: compose(addRandomMediaIds)(chaptersBase),
     medias: compose(
-      addPagination,
-      wrapWithData,
       addRandomAuthorIds,
       addRandomModuleIds,
       addRandomTagIds
     )(mediasBase),
     modules: compose(
-      wrapWithData,
       addRandomAuthorIds,
       addChapters
     )(modulesBase),
-    pages: wrapWithData(pagesBase),
-    tags: wrapWithData(tagsBase),
+    pages: pagesBase,
+    tags: tagsBase,
   }
 }

@@ -7,7 +7,8 @@ Prerequisites
 - Install Composer: https://getcomposer.org/download/
 - Install Symfony CLI: https://symfony.com/download
 - Install Node.js and NPM: https://nodejs.org/en/download/
-- Install Gatsby CLI: `npm install --global gatsby-cli`
+- Install json-server globally (mock server): `npm i -g json-server`
+- Install Gatsby CLI: `npm i -g gatsby-cli`
 
 Then run
 

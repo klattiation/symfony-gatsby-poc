@@ -34,7 +34,7 @@
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
-    "mockserver": "json-server --watch mocks/index.js",
+    "mockserver": "json-server mockserver/mocks/index.js --middlewares mockserver/middlewares/jsonapi.js --watch",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \""
   },
   "repository": {
