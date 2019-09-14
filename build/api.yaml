@@ -832,7 +832,7 @@ components:
 
   parameters:
     pageOffset:
-      name: page
+      name: _page
       in: query
       description: If present, list only entities for the respective page number.
       required: false
@@ -890,7 +890,7 @@ components:
           type: string
 
     sortField:
-      name: sort_field
+      name: _sort
       in: query
       description: Sort field.
       required: false
@@ -899,7 +899,7 @@ components:
         enum: [title, date]
 
     sortOrder:
-      name: sort_order
+      name: _order
       in: query
       description: Sort order.
       required: false

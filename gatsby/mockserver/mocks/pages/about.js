@@ -15,19 +15,30 @@ module.exports = () => ({
   content: {
     title: "Über uns",
     description: casual.description,
-    team: [
+    teamTitle: "Team",
+    teamList: [
       {
-        name: "Max Mustermann",
-        imagePath: "/images/max-mustermann.jpg",
+        name: casual.full_name,
+        imagePath: "/images/team-member-1.jpg",
       },
       {
-        name: "Max Mustermann",
-        imagePath: "/images/max-mustermann.jpg",
+        name: casual.full_name,
+        imagePath: "/images/team-member-2.jpg",
       },
       {
-        name: "Max Mustermann",
-        imagePath: "/images/max-mustermann.jpg",
+        name: casual.full_name,
+        imagePath: "/images/team-member-3.jpg",
+      },
+      {
+        name: casual.full_name,
+        imagePath: "/images/team-member-4.jpg",
       },
     ],
+    contactTitle: "Kontakt",
+    contactLabelName: "Name",
+    contactLabelCompany: "Unternehmen / Organisation",
+    contactLabelEmail: "E-Mail Adresse",
+    contactLabelMessage: "Nachricht",
+    contactLabelSubmit: "Absenden",
   },
 })

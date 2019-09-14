@@ -1,4 +1,4 @@
-const { get, set, isEmpty, flatten } = require("lodash")
+const { curry, get, set, isArray, isEmpty, flatten } = require("lodash")
 const { randomEntries, randomInt } = require("rendum")
 const compose = require("lodash/fp/compose")
 const generateAuthors = require("./authors")
@@ -18,105 +18,111 @@ const getId = entity => get(entity, "id")
 
 const extractIds = list => (isEmpty(list) ? [] : list.map(getId))
 
-const makeEntityEnhancer = ({ min, max, pool, path }) => entities =>
-  entities.map(src => {
-    const count = randomInt({ min, max })
-    const entries = randomEntries(pool, count)
-    return set(src, path, entries)
-  })
+const enhanceRandomEntity = (pool, path, count) => entity => {
+  const entities = count === "all" ? pool : randomEntries(pool, count)
+  return set(entity, path, entities)
+}
+
+const makeEntityEnhancer = curry((pool, path, count, entityOrList) => {
+  const enhance = enhanceRandomEntity(pool, path, count)
+  return isArray(entityOrList)
+    ? entityOrList.map(enhance)
+    : enhance(entityOrList)
+})
 
 const makeChapterEnhancer = ({ chaptersPerModule, path }) => entities =>
-  entities.map((src, idx) => {
+  entities.map((chapter, idx) => {
     const entries = extractIds(chaptersPerModule[idx])
-    return set(src, path, entries)
+    return set(chapter, path, entries)
   })
 
 const countModules = modulesBase => get(modulesBase, "length", 0)
 
 module.exports = () => {
-  // generate entities in base format (without relations)
-  const mediasBase = generateMedias({ count: 100 })
-  const authorsBase = generateAuthors({ count: 20 })
-  const modulesBase = generateModules()
-  const tagsBase = generateTags({ count: 20 })
-  const chapterTypes = generateChapterTypes()
+  // generate entities in base format (without any relations)
+  const allMediasBase = generateMedias({ count: 100 })
+  const allAuthorsBase = generateAuthors({ count: 20 })
+  const allModulesBase = generateModules()
+  const allTagsBase = generateTags({ count: 20 })
+  const allChapterTypes = generateChapterTypes()
   const chaptersPerModule = generateChaptersPerModule({
-    chapterTypes,
-    moduleCount: countModules(modulesBase),
+    chapterTypes: allChapterTypes,
+    moduleCount: countModules(allModulesBase),
   })
-  const chaptersBase = flatten(chaptersPerModule)
+  const allChaptersBase = flatten(chaptersPerModule)
   const pageHomeBase = generatePageHome()
   const pageMediasBase = generatePageMedias()
   const pageAuthorsBase = generatePageAuthors()
   const pageAboutBase = generatePageAbout()
   const pageImprintBase = generatePageImprint()
   const pagePrivacyBase = generatePagePrivacy()
-  const pagesBase = [
-    pageHomeBase,
-    pageMediasBase,
-    pageAuthorsBase,
-    pageAboutBase,
-    pageImprintBase,
-    pagePrivacyBase,
-  ]
 
   // extract ids
-  const allAuthorIds = extractIds(authorsBase)
-  const allMediaIds = extractIds(mediasBase)
-  const allModuleIds = extractIds(modulesBase)
-  const allTagIds = extractIds(tagsBase)
+  const allAuthorIds = extractIds(allAuthorsBase)
+  const allMediaIds = extractIds(allMediasBase)
+  const allModuleIds = extractIds(allModulesBase)
+  const allTagIds = extractIds(allTagsBase)
+  const allChapterTypeIds = extractIds(allChapterTypes)
 
-  // make enhancer
-  const addRandomMediaIds = makeEntityEnhancer({
-    min: 0,
-    max: 10,
-    pool: allMediaIds,
-    path: "content.medias",
-  })
-
-  const addRandomAuthorIds = makeEntityEnhancer({
-    min: 0,
-    max: 3,
-    pool: allAuthorIds,
-    path: "content.authors",
-  })
-
-  const addRandomModuleIds = makeEntityEnhancer({
-    min: 1,
-    max: 3,
-    pool: allModuleIds,
-    path: "content.modules",
-  })
-
-  const addRandomTagIds = makeEntityEnhancer({
-    min: 0,
-    max: 10,
-    pool: allTagIds,
-    path: "content.tags",
-  })
-
+  // make enhancers to add relations
+  const addRandomMediaIds = makeEntityEnhancer(allMediaIds, "content.medias")
+  const addRandomAuthorIds = makeEntityEnhancer(allAuthorIds, "content.authors")
+  const addRandomModuleIds = makeEntityEnhancer(allModuleIds, "content.modules")
+  const addRandomTagIds = makeEntityEnhancer(allTagIds, "content.tags")
+  const addAllTagIds = addRandomTagIds("all")
+  const addAllModuleIds = addRandomModuleIds("all")
+  const addAllAuthorIds = addRandomAuthorIds("all")
+  const addAllChapterTypeIds = makeEntityEnhancer(
+    allChapterTypeIds,
+    "content.chapterTypes",
+    "all"
+  )
   const addChapters = makeChapterEnhancer({
     chaptersPerModule,
     path: "content.chapters",
   })
 
-  // add relations and wrap
+  // add relations and export resources
+  // (data wrapper and pagination object are added in the jsonapi middleware)
   return {
     authors: compose(
-      addRandomMediaIds,
-      addRandomModuleIds
-    )(authorsBase),
-    chapters: compose(addRandomMediaIds)(chaptersBase),
+      addRandomMediaIds(randomInt({ min: 1, max: 10 })),
+      addRandomModuleIds(randomInt({ min: 1, max: 3 }))
+    )(allAuthorsBase),
+
+    chapters: addRandomMediaIds(randomInt({ min: 0, max: 10 }))(
+      allChaptersBase
+    ),
+
     medias: compose(
-      addRandomAuthorIds,
-      addRandomModuleIds,
-      addRandomTagIds
-    )(mediasBase),
+      addRandomAuthorIds(randomInt({ min: 0, max: 3 })),
+      addRandomModuleIds(randomInt({ min: 1, max: 3 })),
+      addRandomTagIds(randomInt({ min: 0, max: 10 }))
+    )(allMediasBase),
+
     modules: compose(
-      addRandomAuthorIds,
+      addRandomAuthorIds(randomInt({ min: 0, max: 3 })),
       addChapters
-    )(modulesBase),
-    pages: pagesBase,
-    tags: tagsBase,
+    )(allModulesBase),
+
+    pages: [
+      compose(
+        addAllModuleIds,
+        addRandomMediaIds(8)
+      )(pageHomeBase),
+      compose(
+        addAllTagIds,
+        addAllAuthorIds,
+        addAllModuleIds,
+        addAllChapterTypeIds,
+        addRandomMediaIds(28)
+      )(pageMediasBase),
+      addRandomAuthorIds(28, pageAuthorsBase),
+      pageAboutBase,
+      pageImprintBase,
+      pagePrivacyBase,
+    ],
+
+    tags: allTagsBase,
   }
 }

@@ -1,5 +1,5 @@
 module.exports = () => ({
-  id: "authors-overview",
+  id: "authors",
   path: "/autoren",
   seo: {
     title: "AdB Virtual Academy - Autorenübersicht",

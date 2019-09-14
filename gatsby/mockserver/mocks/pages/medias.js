@@ -12,5 +12,11 @@ module.exports = () => ({
   },
   content: {
     title: "Mediaübersicht",
+    tagsTitle: "Tags",
+    sortLabel: "Sortieren",
+    sortLabelAlpha: "A-Z",
+    sortLabelDate: "Datum",
+    sort: "title", // enum: "title" || "date"
+    order: "asc", // enum: "asc" || "desc"
   },
 })
