@@ -1,6 +1,6 @@
 const casual = require("casual").de_DE
 const kebabCase = require("lodash/kebabCase")
-const { randomSizedArray, randomEntry } = require("./_utils")
+const { randomEntry, randomSizedArray } = require("rendum")
 
 module.exports = ({ count = 100 }) => {
   return Array.from({ length: count }, () => {

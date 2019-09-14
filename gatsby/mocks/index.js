@@ -1,4 +1,5 @@
 const { get, set, isEmpty, flatten } = require("lodash")
+const { randomEntries, randomInt } = require("rendum")
 const compose = require("lodash/fp/compose")
 const generateAuthors = require("./authors")
 const generateMedias = require("./medias")
@@ -12,7 +13,6 @@ const generatePageAuthors = require("./pages/authors")
 const generatePageAbout = require("./pages/about")
 const generatePageImprint = require("./pages/imprint")
 const generatePagePrivacy = require("./pages/privacy")
-const { randomEntries, randomIntBetween } = require("./_utils")
 
 const getId = entity => get(entity, "id")
 
@@ -20,7 +20,7 @@ const extractIds = list => (isEmpty(list) ? [] : list.map(getId))
 
 const makeEntityEnhancer = ({ min, max, pool, path }) => entities =>
   entities.map(src => {
-    const count = randomIntBetween(min, max)
+    const count = randomInt({ min, max })
     const entries = randomEntries(pool, count)
     return set(src, path, entries)
   })
