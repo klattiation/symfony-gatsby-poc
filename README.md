@@ -19,46 +19,37 @@ make setup
 
 ### Start frontend
 
-With the mock server API:
+```console
+make start-mockserver
+make start-frontend-dev
+```
+
+This will start a node.js mock server on port 3000. The frontend will be built using this server until the Symfony API is implemented. After the build process, the frontend is available at http://localhost:8000.
+
+_Note: It's inevitable to start the server before building the frontend, because site data will be fetched during the build process._
+
+## Deployment
+
+### Production build
 
 ```console
-cd gatsby
-npm run mockserver
-npm start
+make build-frontend-prod
 ```
 
-This will start a node.js mock server on port 3000. The frontend will be built using this server. After the build process, the frontend will be available at http://localhost:8000.
+This will build the frontend into the `gatsby/public` folder. This folder will then contain a static web app that can be deployed to any server.
 
-_Note: It's inevitable to start the mock server before building the frontend, because the build process uses the mock server to generate all the static sites._
-
-With the backend API:
+To test the production-ready frontend, run the following command which will start a local server at http://localhost:9000:
 
 ```
-// TODO...
+make start-frontend-prod
 ```
 
-### Build the frontend for production
+## Further details
 
-At the moment, the frontend can be built using the mock server API (backend API is not implemented yet):
-
-```console
-cd gatsby
-npm run mockserver
-npm run build
-```
-
-This will build the frontend into the `/public` folder. This folder now contains a static frontend that can be deployed to any server.
-
-Running the following command will start a local server at http://localhost:9000 that runs the production-ready frontend:
-
-```
-npm run serve
-```
-
-## Further Links
-
-- [Using Gatsby for a web app with dynamic content — A case study](https://blog.hasura.io/building-a-dynamic-listing-web-app-with-pagination-and-dynamic-pages-using-gatsby-2ddee9ec2dc3/)
+- [Frontend](docs/frontend.md)
+- [REST API](docs/api.md)
+- [Further links](docs/links.md)
 
 ## License
 
-See [LICENSE](gatsby/LICENSE) file.
+See [LICENSE](LICENSE) file.

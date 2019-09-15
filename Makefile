@@ -18,5 +18,12 @@ stop-backend:
 start-mockserver:
 	cd ./gatsby/ && npm run mockserver
 
-start-frontend:
+start-frontend-dev:
+	cd ./gatsby/ && npm start
+
+build-frontend-prod:
+	cd ./gatsby/ && npm run build
+
+start-frontend-prod:
 	cd ./gatsby/ && npm run serve
+
