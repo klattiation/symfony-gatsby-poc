@@ -4,12 +4,13 @@
 
 Prerequisites
 
-- Install Composer: https://getcomposer.org/download/
-- Install Symfony CLI: https://symfony.com/download
-- Install Node.js and NPM: https://nodejs.org/en/download/
+- Install [Composer](https://getcomposer.org/download/)
+- Install [Symfony CLI](https://symfony.com/download)
+- Install [Node.js and NPM](https://nodejs.org/en/download/)
 - Install Gatsby CLI: `npm i -g gatsby-cli`
+- Install [Prettier](https://prettier.io/)
 
-Then run
+Setup the project by running:
 
 ```console
 make setup
@@ -26,7 +27,7 @@ make start-frontend-dev
 
 This will start a node.js mock server on port 3000. The frontend will be built using this server until the Symfony API is implemented. After the build process, the frontend is available at http://localhost:8000.
 
-_Note: It's inevitable to start the server before building the frontend, because site data will be fetched during the build process._
+_Note: It's inevitable to start the server before building the frontend, because site data will be fetched from the server during the build process._
 
 ## Deployment
 

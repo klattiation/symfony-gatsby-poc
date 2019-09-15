@@ -8,20 +8,34 @@ const axios = require("axios")
 const MD5 = require("crypto-js/md5")
 const path = require("path")
 const get = require("lodash/get")
+const colors = require("colors")
 
 const BACKEND_URL = "http://localhost:3000"
 
 const encrypt = value => MD5(JSON.stringify(value)).toString()
 
-const getMedias = () => axios.get(`${BACKEND_URL}/medias`)
+const getMedias = () =>
+  axios.get(`${BACKEND_URL}/medias`).then(res => get(res, "data.data", []))
+
+const logError = error => {
+  console.log(colors.red("error"))
+  console.log(colors.red(error))
+}
+
+const logInfo = (...args) => {
+  console.log(colors.blue("info"), ...args)
+}
+
+const logDebug = (...args) => {
+  console.log(colors.magenta("debug"), ...args)
+}
 
 exports.sourceNodes = async ({ actions }) => {
   const { createNode } = actions
   return new Promise((resolve, reject) => {
     getMedias()
-      .then(({ data }) => {
-        const medias = get(data, "medias", [])
-        console.log("> Resolve medias", medias.length)
+      .then(medias => {
+        logInfo("resolve medias:", medias.length)
         medias.forEach(media => {
           createNode({
             ...media,
@@ -36,8 +50,7 @@ exports.sourceNodes = async ({ actions }) => {
         resolve()
       })
       .catch(error => {
-        console.log("\nError")
-        console.log(error)
+        logError(error)
         reject()
       })
   })
@@ -59,7 +72,7 @@ exports.createPages = ({ graphql, actions }) => {
       }
     `)
       .then(({ data }) => {
-        console.log("> Create medias pages", data.allMedia.edges.length)
+        logInfo("create medias pages:", data.allMedia.edges.length)
         data.allMedia.edges.forEach(({ node }) => {
           createPage({
             path: node.path,
@@ -72,8 +85,7 @@ exports.createPages = ({ graphql, actions }) => {
         resolve()
       })
       .catch(error => {
-        console.log("\nError")
-        console.log(error)
+        logError(error)
         reject()
       })
   })
