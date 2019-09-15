@@ -1,4 +1,12 @@
-const { curry, get, set, isArray, isEmpty, flatten } = require("lodash")
+const {
+  curry,
+  get,
+  set,
+  isArray,
+  isEmpty,
+  isNumber,
+  flatten,
+} = require("lodash")
 const { randomEntries, randomInt } = require("rendum")
 const compose = require("lodash/fp/compose")
 const generateAuthors = require("./authors")
@@ -18,13 +26,14 @@ const getId = entity => get(entity, "id")
 
 const extractIds = list => (isEmpty(list) ? [] : list.map(getId))
 
-const enhanceRandomEntity = (pool, path, count) => entity => {
+const enhanceRandomEntity = (pool, path, countOrRange) => entity => {
+  const count = isNumber(countOrRange) ? countOrRange : randomInt(countOrRange)
   const entities = count === "all" ? pool : randomEntries(pool, count)
   return set(entity, path, entities)
 }
 
-const makeEntityEnhancer = curry((pool, path, count, entityOrList) => {
-  const enhance = enhanceRandomEntity(pool, path, count)
+const makeEntityEnhancer = curry((pool, path, countOrRange, entityOrList) => {
+  const enhance = enhanceRandomEntity(pool, path, countOrRange)
   return isArray(entityOrList)
     ? entityOrList.map(enhance)
     : enhance(entityOrList)
@@ -64,6 +73,8 @@ module.exports = () => {
   const allTagIds = extractIds(allTagsBase)
   const allChapterTypeIds = extractIds(allChapterTypes)
 
+  // console.log("authorIds", allAuthorIds)
+
   // make enhancers to add relations
   const addRandomMediaIds = makeEntityEnhancer(allMediaIds, "content.medias")
   const addRandomAuthorIds = makeEntityEnhancer(allAuthorIds, "content.authors")
@@ -86,22 +97,20 @@ module.exports = () => {
   // (data wrapper and pagination object are added in the jsonapi middleware)
   return {
     authors: compose(
-      addRandomMediaIds(randomInt({ min: 1, max: 10 })),
-      addRandomModuleIds(randomInt({ min: 1, max: 3 }))
+      addRandomMediaIds({ min: 1, max: 10 }),
+      addRandomModuleIds({ min: 1, max: 3 })
     )(allAuthorsBase),
 
-    chapters: addRandomMediaIds(randomInt({ min: 0, max: 10 }))(
-      allChaptersBase
-    ),
+    chapters: addRandomMediaIds({ min: 0, max: 10 })(allChaptersBase),
 
     medias: compose(
-      addRandomAuthorIds(randomInt({ min: 0, max: 3 })),
-      addRandomModuleIds(randomInt({ min: 1, max: 3 })),
-      addRandomTagIds(randomInt({ min: 0, max: 10 }))
+      addRandomAuthorIds({ min: 1, max: 3 }),
+      addRandomModuleIds({ min: 1, max: 3 }),
+      addRandomTagIds({ min: 0, max: 10 })
     )(allMediasBase),
 
     modules: compose(
-      addRandomAuthorIds(randomInt({ min: 0, max: 3 })),
+      addRandomAuthorIds({ min: 0, max: 3 }),
       addChapters
     )(allModulesBase),
 

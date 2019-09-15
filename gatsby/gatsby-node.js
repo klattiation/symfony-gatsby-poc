@@ -12,11 +12,6 @@ const colors = require("colors")
 
 const BACKEND_URL = "http://localhost:3000"
 
-const encrypt = value => MD5(JSON.stringify(value)).toString()
-
-const getMedias = () =>
-  axios.get(`${BACKEND_URL}/medias`).then(res => get(res, "data.data", []))
-
 const logError = error => {
   console.log(colors.red("error"))
   console.log(colors.red(error))
@@ -30,10 +25,13 @@ const logDebug = (...args) => {
   console.log(colors.magenta("debug"), ...args)
 }
 
-exports.sourceNodes = async ({ actions }) => {
-  const { createNode } = actions
-  return new Promise((resolve, reject) => {
-    getMedias()
+const encrypt = value => MD5(JSON.stringify(value)).toString()
+
+const getAllMedias = ({ createNode }) =>
+  new Promise((resolve, reject) =>
+    axios
+      .get(`${BACKEND_URL}/medias`)
+      .then(res => get(res, "data.data", []))
       .then(medias => {
         logInfo("resolve medias:", medias.length)
         medias.forEach(media => {
@@ -53,7 +51,10 @@ exports.sourceNodes = async ({ actions }) => {
         logError(error)
         reject()
       })
-  })
+  )
+
+exports.sourceNodes = async ({ actions }) => {
+  return Promise.all([getAllMedias(actions)])
 }
 
 exports.createPages = ({ graphql, actions }) => {
