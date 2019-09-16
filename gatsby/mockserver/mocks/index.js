@@ -101,6 +101,8 @@ module.exports = () => {
 
     chapters: addRandomMediaIds({ min: 0, max: 10 })(allChaptersBase),
 
+    "chapter-types": allChapterTypes,
+
     medias: compose(
       addRandomAuthorIds({ min: 1, max: 3 }),
       addRandomModuleIds({ min: 1, max: 3 }),

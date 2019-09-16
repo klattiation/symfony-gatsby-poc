@@ -57,8 +57,7 @@ const resolveRelation = relField => entity => {
   }
 }
 
-const makeNodeCreator = ({
-  createNode,
+const nodeFactory = createNode => ({
   nodeType,
   relationFields = [],
 }) => resource => {
@@ -80,24 +79,46 @@ exports.sourceNodes = async ({ actions }) => {
   logInfo(`${pkg.name}: sourceNodes`)
 
   const { createNode } = actions
-  const [authors, chapters, medias, modules, tags] = await Promise.all([
+  const [
+    authors,
+    chapters,
+    chapterTypes,
+    medias,
+    modules,
+    tags,
+    pageHome,
+    pageMedias,
+    pageAuthors,
+    pageAbout,
+    pageImprint,
+    pagePrivacy,
+  ] = await Promise.all([
     fetchResources(`${MOCKSERVER_URL}/authors`),
     fetchResources(`${MOCKSERVER_URL}/chapters`),
+    fetchResources(`${MOCKSERVER_URL}/chapter-types`),
     fetchResources(`${MOCKSERVER_URL}/medias`),
     fetchResources(`${MOCKSERVER_URL}/modules`),
     fetchResources(`${MOCKSERVER_URL}/tags`),
+    fetchResources(`${MOCKSERVER_URL}/pages/home`),
+    fetchResources(`${MOCKSERVER_URL}/pages/medias`),
+    fetchResources(`${MOCKSERVER_URL}/pages/authors`),
+    fetchResources(`${MOCKSERVER_URL}/pages/about`),
+    fetchResources(`${MOCKSERVER_URL}/pages/imprint`),
+    fetchResources(`${MOCKSERVER_URL}/pages/privacy`),
   ]).catch(logAndThrowError)
 
   logInfo(`> fetched resources`)
   logInfo(`> - authors: ${authors.length}`)
   logInfo(`> - chapters: ${chapters.length}`)
+  logInfo(`> - chapterTypes: ${chapterTypes.length}`)
   logInfo(`> - medias: ${medias.length}`)
   logInfo(`> - modules: ${modules.length}`)
   logInfo(`> - tags: ${tags.length}`)
 
+  const makeNodeCreator = nodeFactory(createNode)
+
   authors.forEach(
     makeNodeCreator({
-      createNode,
       nodeType: "Author",
       relationFields: ["modules", "medias"],
     })
@@ -105,14 +126,18 @@ exports.sourceNodes = async ({ actions }) => {
 
   chapters.forEach(
     makeNodeCreator({
-      createNode,
       nodeType: "Chapter",
+    })
+  )
+
+  chapterTypes.forEach(
+    makeNodeCreator({
+      nodeType: "ChapterType",
     })
   )
 
   medias.forEach(
     makeNodeCreator({
-      createNode,
       nodeType: "Media",
       relationFields: ["authors", "tags", "modules"],
     })
@@ -120,7 +145,6 @@ exports.sourceNodes = async ({ actions }) => {
 
   modules.forEach(
     makeNodeCreator({
-      createNode,
       nodeType: "Module",
       relationFields: ["authors"],
     })
@@ -128,10 +152,36 @@ exports.sourceNodes = async ({ actions }) => {
 
   tags.forEach(
     makeNodeCreator({
-      createNode,
       nodeType: "Tag",
     })
   )
+
+  makeNodeCreator({
+    nodeType: "CorePageHome",
+    relationFields: ["modules", "medias"],
+  })(pageHome)
+
+  makeNodeCreator({
+    nodeType: "CorePageMedias",
+    relationFields: ["authors", "tags", "modules", "medias"],
+  })(pageMedias)
+
+  makeNodeCreator({
+    nodeType: "CorePageAuthors",
+    relationFields: ["authors"],
+  })(pageAuthors)
+
+  makeNodeCreator({
+    nodeType: "CorePageAbout",
+  })(pageAbout)
+
+  makeNodeCreator({
+    nodeType: "CorePageImprint",
+  })(pageImprint)
+
+  makeNodeCreator({
+    nodeType: "CorePagePrivacy",
+  })(pagePrivacy)
 
   logInfo(`> successfully created nodes from resources`)
 }

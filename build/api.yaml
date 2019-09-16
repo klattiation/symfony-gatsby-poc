@@ -58,6 +58,25 @@ paths:
                     items:
                       $ref: "#/components/schemas/Chapter"
 
+  /chapter-types:
+    get:
+      tags:
+        - chapters
+      summary: Get chapter types
+      description: Returns a list of all chapter types. It is used to generate a list of all chapter types inside the internal Gatsby store during the frontend build process.
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ChapterType"
+
   /authors:
     get:
       tags:
@@ -926,7 +945,8 @@ components:
         items:
           type: string
 
-# Added by API Auto Mocking Plugin
 servers:
+  - description: Local mock server
+    url: http://localhost:3000
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/klattmansash/VirtualAcademy/1.0

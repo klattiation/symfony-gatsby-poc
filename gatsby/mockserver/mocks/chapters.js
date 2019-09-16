@@ -4,11 +4,11 @@ const times = require("lodash/times")
 const generateChaptersPerModule = chapterTypes => [
   {
     id: casual.uuid,
-    type: chapterTypes[0],
+    type: chapterTypes[0].id,
   },
   {
     id: casual.uuid,
-    type: chapterTypes[1],
+    type: chapterTypes[1].id,
   },
 ]
 
