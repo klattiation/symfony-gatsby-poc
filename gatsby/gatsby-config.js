@@ -1,10 +1,11 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Symfony POC`,
-    description: `This app demonstrates the interaction of a Symfony backend and Gatsby frontend.`,
-    author: `@klattiation`,
+    title: `AdB Virtual Academy`,
+    description: `The Adb Virtual Academy web application.`,
+    author: `Sascha Klatt`,
   },
   plugins: [
+    `gatsby-plugin-source-virtual-academy-api`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,

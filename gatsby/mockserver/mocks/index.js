@@ -73,8 +73,6 @@ module.exports = () => {
   const allTagIds = extractIds(allTagsBase)
   const allChapterTypeIds = extractIds(allChapterTypes)
 
-  // console.log("authorIds", allAuthorIds)
-
   // make enhancers to add relations
   const addRandomMediaIds = makeEntityEnhancer(allMediaIds, "content.medias")
   const addRandomAuthorIds = makeEntityEnhancer(allAuthorIds, "content.authors")
