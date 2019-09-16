@@ -1,5 +1,17 @@
 const casual = require("casual").de_DE
 const { lowerCase, times } = require("lodash")
+const { randomEntry } = require("rendum")
+
+const positionPool = [
+  "Grundschullehrer",
+  "Mittelschullehrer",
+  "Gymnasiallehrer",
+  "Professor",
+  "Streetworker",
+  "Kindergärtner",
+  "Aktivist",
+  "Software Entwickler",
+]
 
 module.exports = ({ count = 20 }) =>
   times(count, () => {
@@ -16,7 +28,7 @@ module.exports = ({ count = 20 }) =>
         lastName,
         type: casual.boolean ? "person" : "organisation",
         organisationName: casual.company_name,
-        position: "Gymnasiallehrer",
+        position: randomEntry(positionPool),
         description: casual.description,
         phone: casual.phone,
         email: casual.email,
@@ -24,8 +36,8 @@ module.exports = ({ count = 20 }) =>
         instagramId: `https://instagram.com/${lowerCase(firstName)}.${lowerCase(lastName)}`,
         facebookId: `https://facebook.com/${casual.uuid}`,
         imagePath: `images/${id}.jpg`,
-        path: `/authors/${lowerCase(firstName)}-${lowerCase(lastName)}`,
       },
+      path: `/autoren/${lowerCase(firstName)}-${lowerCase(lastName)}`,
       seo: {
         title,
         metaTags: [

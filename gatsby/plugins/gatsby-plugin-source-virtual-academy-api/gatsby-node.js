@@ -27,10 +27,6 @@ const logInfo = (...args) => {
   console.log(colors.blue("info"), ...args)
 }
 
-const logDebug = (...args) => {
-  console.log(colors.magenta("debug"), ...args)
-}
-
 const fetchResources = url =>
   new Promise((resolve, reject) =>
     axios
@@ -77,8 +73,6 @@ const nodeFactory = createNode => ({
 
 exports.sourceNodes = async ({ actions }) => {
   logInfo(`${pkg.name}: sourceNodes`)
-
-  const { createNode } = actions
   const [
     authors,
     chapters,
@@ -115,7 +109,7 @@ exports.sourceNodes = async ({ actions }) => {
   logInfo(`> - modules: ${modules.length}`)
   logInfo(`> - tags: ${tags.length}`)
 
-  const makeNodeCreator = nodeFactory(createNode)
+  const makeNodeCreator = nodeFactory(actions.createNode)
 
   authors.forEach(
     makeNodeCreator({
