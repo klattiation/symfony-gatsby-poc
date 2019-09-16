@@ -82,6 +82,7 @@ exports.sourceNodes = async ({ actions }) => {
     tags,
     pageHome,
     pageMedias,
+    pageMediaForm,
     pageAuthors,
     pageAbout,
     pageImprint,
@@ -95,6 +96,7 @@ exports.sourceNodes = async ({ actions }) => {
     fetchResources(`${MOCKSERVER_URL}/tags`),
     fetchResources(`${MOCKSERVER_URL}/pages/home`),
     fetchResources(`${MOCKSERVER_URL}/pages/medias`),
+    fetchResources(`${MOCKSERVER_URL}/pages/media-form`),
     fetchResources(`${MOCKSERVER_URL}/pages/authors`),
     fetchResources(`${MOCKSERVER_URL}/pages/about`),
     fetchResources(`${MOCKSERVER_URL}/pages/imprint`),
@@ -159,6 +161,10 @@ exports.sourceNodes = async ({ actions }) => {
     nodeType: "CorePageMedias",
     relationFields: ["authors", "tags", "modules", "medias"],
   })(pageMedias)
+
+  makeNodeCreator({
+    nodeType: "CorePageMediaForm",
+  })(pageMediaForm)
 
   makeNodeCreator({
     nodeType: "CorePageAuthors",

@@ -252,6 +252,31 @@ const createAboutPage = async ({ graphql, actions }) => {
   })
 }
 
+const createMediaFormPage = async ({ graphql, actions }) => {
+  const { data, error } = await graphql(`
+    {
+      corePageMediaForm {
+        id
+        path
+      }
+    }
+  `)
+
+  if (error) {
+    logAndThrowError(error)
+  }
+
+  logInfo("create page media-form", data)
+  const node = data.corePageMediaForm
+  actions.createPage({
+    path: node.path,
+    component: path.resolve(`./src/templates/media-form.js`),
+    context: {
+      id: node.id,
+    },
+  })
+}
+
 exports.createPages = async args => {
   createHomePage(args)
   createAuthorsPage(args)
@@ -262,4 +287,5 @@ exports.createPages = async args => {
   createImprintPage(args)
   createPrivacyPage(args)
   createAboutPage(args)
+  createMediaFormPage(args)
 }

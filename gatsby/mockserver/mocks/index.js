@@ -17,6 +17,7 @@ const generateChapterTypes = require("./chapterTypes")
 const generateChaptersPerModule = require("./chapters")
 const generatePageHome = require("./pages/home")
 const generatePageMedias = require("./pages/medias")
+const generatePageMediaForm = require("./pages/mediaForm")
 const generatePageAuthors = require("./pages/authors")
 const generatePageAbout = require("./pages/about")
 const generatePageImprint = require("./pages/imprint")
@@ -65,6 +66,7 @@ module.exports = () => {
   const pageAboutBase = generatePageAbout()
   const pageImprintBase = generatePageImprint()
   const pagePrivacyBase = generatePagePrivacy()
+  const pageMediaForm = generatePageMediaForm()
 
   // extract ids
   const allAuthorIds = extractIds(allAuthorsBase)
@@ -130,6 +132,7 @@ module.exports = () => {
       pageAboutBase,
       pageImprintBase,
       pagePrivacyBase,
+      pageMediaForm,
     ],
 
     tags: allTagsBase,
