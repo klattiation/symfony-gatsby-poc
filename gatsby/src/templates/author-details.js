@@ -6,10 +6,12 @@ export default ({ data }) => {
   const { firstName, lastName, position } = data.author.content
   return (
     <Layout>
-      <h2>
-        {firstName} {lastName}
-      </h2>
-      <sub>{position}</sub>
+      <section>
+        <h2>
+          {firstName} {lastName}
+        </h2>
+        <sub>{position}</sub>
+      </section>
       <Link to="/">Home</Link>
     </Layout>
   )

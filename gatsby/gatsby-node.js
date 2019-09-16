@@ -37,6 +37,31 @@ const createHomePage = async ({ graphql, actions }) => {
   })
 }
 
+const createAuthorsPage = async ({ graphql, actions }) => {
+  const { data, error } = await graphql(`
+    {
+      corePageAuthors {
+        id
+        path
+      }
+    }
+  `)
+
+  if (error) {
+    logAndThrowError(error)
+  }
+
+  logInfo("create page authors", data)
+  const node = data.corePageAuthors
+  actions.createPage({
+    path: node.path,
+    component: path.resolve(`./src/templates/authors.js`),
+    context: {
+      id: node.id,
+    },
+  })
+}
+
 const createMediaDetailsPages = async ({ graphql, actions }) => {
   const { data, error } = await graphql(`
     {
@@ -129,6 +154,7 @@ const createModuleDetailsPages = async ({ graphql, actions }) => {
 
 exports.createPages = async args => {
   createHomePage(args)
+  createAuthorsPage(args)
   createMediaDetailsPages(args)
   createAuthorDetailsPages(args)
   createModuleDetailsPages(args)
