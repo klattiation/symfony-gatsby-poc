@@ -62,6 +62,31 @@ const createAuthorsPage = async ({ graphql, actions }) => {
   })
 }
 
+const createMediasPage = async ({ graphql, actions }) => {
+  const { data, error } = await graphql(`
+    {
+      corePageMedias {
+        id
+        path
+      }
+    }
+  `)
+
+  if (error) {
+    logAndThrowError(error)
+  }
+
+  logInfo("create page medias", data)
+  const node = data.corePageMedias
+  actions.createPage({
+    path: node.path,
+    component: path.resolve(`./src/templates/medias.js`),
+    context: {
+      id: node.id,
+    },
+  })
+}
+
 const createMediaDetailsPages = async ({ graphql, actions }) => {
   const { data, error } = await graphql(`
     {
@@ -152,10 +177,89 @@ const createModuleDetailsPages = async ({ graphql, actions }) => {
   })
 }
 
+const createImprintPage = async ({ graphql, actions }) => {
+  const { data, error } = await graphql(`
+    {
+      corePageImprint {
+        id
+        path
+      }
+    }
+  `)
+
+  if (error) {
+    logAndThrowError(error)
+  }
+
+  logInfo("create page imprint", data)
+  const node = data.corePageImprint
+  actions.createPage({
+    path: node.path,
+    component: path.resolve(`./src/templates/imprint.js`),
+    context: {
+      id: node.id,
+    },
+  })
+}
+
+const createPrivacyPage = async ({ graphql, actions }) => {
+  const { data, error } = await graphql(`
+    {
+      corePagePrivacy {
+        id
+        path
+      }
+    }
+  `)
+
+  if (error) {
+    logAndThrowError(error)
+  }
+
+  logInfo("create page privacy", data)
+  const node = data.corePagePrivacy
+  actions.createPage({
+    path: node.path,
+    component: path.resolve(`./src/templates/privacy.js`),
+    context: {
+      id: node.id,
+    },
+  })
+}
+
+const createAboutPage = async ({ graphql, actions }) => {
+  const { data, error } = await graphql(`
+    {
+      corePageAbout {
+        id
+        path
+      }
+    }
+  `)
+
+  if (error) {
+    logAndThrowError(error)
+  }
+
+  logInfo("create page about", data)
+  const node = data.corePageAbout
+  actions.createPage({
+    path: node.path,
+    component: path.resolve(`./src/templates/about.js`),
+    context: {
+      id: node.id,
+    },
+  })
+}
+
 exports.createPages = async args => {
   createHomePage(args)
   createAuthorsPage(args)
+  createMediasPage(args)
   createMediaDetailsPages(args)
   createAuthorDetailsPages(args)
   createModuleDetailsPages(args)
+  createImprintPage(args)
+  createPrivacyPage(args)
+  createAboutPage(args)
 }
