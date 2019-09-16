@@ -1,11 +1,10 @@
 {
   "name": "gatsby-plugin-source-virtual-academy-api",
-  "description": "Fetches data from the Symfony REST API of this project.",
+  "description": "Fetches resources from the REST API of this project and stores them as nodes within the internal Gatsby store.",
   "version": "0.1.0",
   "author": "Sascha Klatt",
   "dependencies": {},
   "devDependencies": {},
-  "license": "LicenseRef-LICENSE",
   "scripts": {
     "test": "echo \"Write tests!"
   }

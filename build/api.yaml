@@ -39,6 +39,25 @@ paths:
                     items:
                       $ref: "#/components/schemas/Tag"
 
+  /chapters:
+    get:
+      tags:
+        - chapters
+      summary: Get chapters
+      description: Returns a list of all chapters. It is used to generate a list of all chapters inside the internal Gatsby store during the frontend build process.
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Chapter"
+
   /authors:
     get:
       tags:
