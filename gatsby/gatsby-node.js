@@ -12,6 +12,31 @@ const logInfo = (...args) => {
   console.log(colors.blue("info"), ...args)
 }
 
+const createHomePage = async ({ graphql, actions }) => {
+  const { data, error } = await graphql(`
+    {
+      corePageHome {
+        id
+        path
+      }
+    }
+  `)
+
+  if (error) {
+    logAndThrowError(error)
+  }
+
+  logInfo("create page home", data)
+  const node = data.corePageHome
+  actions.createPage({
+    path: node.path,
+    component: path.resolve(`./src/templates/home.js`),
+    context: {
+      id: node.id,
+    },
+  })
+}
+
 const createMediaDetailsPages = async ({ graphql, actions }) => {
   const { data, error } = await graphql(`
     {
@@ -50,11 +75,6 @@ const createAuthorDetailsPages = async ({ graphql, actions }) => {
           node {
             id
             path
-            content {
-              firstName
-              lastName
-              position
-            }
           }
         }
       }
@@ -77,7 +97,39 @@ const createAuthorDetailsPages = async ({ graphql, actions }) => {
   })
 }
 
+const createModuleDetailsPages = async ({ graphql, actions }) => {
+  const { data, error } = await graphql(`
+    {
+      allModule {
+        edges {
+          node {
+            id
+            path
+          }
+        }
+      }
+    }
+  `)
+
+  if (error) {
+    logAndThrowError(error)
+  }
+
+  logInfo("create module pages:", get(data, "allModule.edges.length"))
+  data.allModule.edges.forEach(({ node }) => {
+    actions.createPage({
+      path: node.path,
+      component: path.resolve(`./src/templates/module-details.js`),
+      context: {
+        moduleId: node.id,
+      },
+    })
+  })
+}
+
 exports.createPages = async args => {
+  createHomePage(args)
   createMediaDetailsPages(args)
   createAuthorDetailsPages(args)
+  createModuleDetailsPages(args)
 }

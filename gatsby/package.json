@@ -34,7 +34,7 @@
     "develop": "gatsby develop",
     "clean": "gatsby clean",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
-    "start": "gatsby clean && gatsby develop",
+    "start": "gatsby develop",
     "playground": "GATSBY_GRAPHQL_IDE=playground gatsby develop",
     "serve": "gatsby serve",
     "mockserver": "json-server mockserver/mocks/index.js --middlewares mockserver/middlewares/jsonapi.js --watch",
