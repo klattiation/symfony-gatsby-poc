@@ -76,21 +76,30 @@ module.exports = () => {
   const allChapterTypeIds = extractIds(allChapterTypes)
 
   // make enhancers to add relations
-  const addRandomMediaIds = makeEntityEnhancer(allMediaIds, "content.medias")
-  const addRandomAuthorIds = makeEntityEnhancer(allAuthorIds, "content.authors")
-  const addRandomModuleIds = makeEntityEnhancer(allModuleIds, "content.modules")
-  const addRandomTagIds = makeEntityEnhancer(allTagIds, "content.tags")
+  const addRandomMediaIds = makeEntityEnhancer(
+    allMediaIds,
+    "relationships.medias"
+  )
+  const addRandomAuthorIds = makeEntityEnhancer(
+    allAuthorIds,
+    "relationships.authors"
+  )
+  const addRandomModuleIds = makeEntityEnhancer(
+    allModuleIds,
+    "relationships.modules"
+  )
+  const addRandomTagIds = makeEntityEnhancer(allTagIds, "relationships.tags")
   const addAllTagIds = addRandomTagIds("all")
   const addAllModuleIds = addRandomModuleIds("all")
   const addAllAuthorIds = addRandomAuthorIds("all")
   const addAllChapterTypeIds = makeEntityEnhancer(
     allChapterTypeIds,
-    "content.chapterTypes",
+    "relationships.chapterTypes",
     "all"
   )
   const addChapters = makeChapterEnhancer({
     chaptersPerModule,
-    path: "content.chapters",
+    path: "relationships.chapters",
   })
 
   // add relations and export resources

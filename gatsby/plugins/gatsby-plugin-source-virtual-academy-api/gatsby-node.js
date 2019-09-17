@@ -59,8 +59,8 @@ const nodeFactory = createNode => ({
 }) => resource => {
   createNode({
     ...resource,
-    content: {
-      ...compose(relationFields.map(resolveRelation))(resource.content),
+    relationships: {
+      ...compose(relationFields.map(resolveRelation))(resource.relationships),
     },
     parent: null,
     children: [],

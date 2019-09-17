@@ -4,7 +4,7 @@ import get from "lodash/get"
 import Layout from "../components/layout"
 
 const getTitle = data => get(data, "corePageMedias.content.title")
-const getMedias = data => get(data, "corePageMedias.content.medias", [])
+const getMedias = data => get(data, "corePageMedias.relationships.medias", [])
 
 export default ({ data }) => (
   <Layout>
@@ -38,15 +38,13 @@ export const query = graphql`
       content {
         title
         tagsTitle
-        tags {
-          title
-          id
-        }
         sortLabelDate
         sortLabelAlpha
         sortLabel
         sort
         order
+      }
+      relationships {
         modules {
           id
           content {
@@ -70,6 +68,10 @@ export const query = graphql`
             firstName
             organisationName
           }
+        }
+        tags {
+          title
+          id
         }
       }
     }

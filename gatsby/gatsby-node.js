@@ -26,7 +26,7 @@ const createHomePage = async ({ graphql, actions }) => {
     logAndThrowError(error)
   }
 
-  logInfo("create page home", data)
+  logInfo("create page home")
   const node = data.corePageHome
   actions.createPage({
     path: node.path,
@@ -51,7 +51,7 @@ const createAuthorsPage = async ({ graphql, actions }) => {
     logAndThrowError(error)
   }
 
-  logInfo("create page authors", data)
+  logInfo("create page authors")
   const node = data.corePageAuthors
   actions.createPage({
     path: node.path,
@@ -76,7 +76,7 @@ const createMediasPage = async ({ graphql, actions }) => {
     logAndThrowError(error)
   }
 
-  logInfo("create page medias", data)
+  logInfo("create page medias")
   const node = data.corePageMedias
   actions.createPage({
     path: node.path,
@@ -191,7 +191,7 @@ const createImprintPage = async ({ graphql, actions }) => {
     logAndThrowError(error)
   }
 
-  logInfo("create page imprint", data)
+  logInfo("create page imprint")
   const node = data.corePageImprint
   actions.createPage({
     path: node.path,
@@ -216,7 +216,7 @@ const createPrivacyPage = async ({ graphql, actions }) => {
     logAndThrowError(error)
   }
 
-  logInfo("create page privacy", data)
+  logInfo("create page privacy")
   const node = data.corePagePrivacy
   actions.createPage({
     path: node.path,
@@ -241,7 +241,7 @@ const createAboutPage = async ({ graphql, actions }) => {
     logAndThrowError(error)
   }
 
-  logInfo("create page about", data)
+  logInfo("create page about")
   const node = data.corePageAbout
   actions.createPage({
     path: node.path,
@@ -266,7 +266,7 @@ const createMediaFormPage = async ({ graphql, actions }) => {
     logAndThrowError(error)
   }
 
-  logInfo("create page media-form", data)
+  logInfo("create page media-form")
   const node = data.corePageMediaForm
   actions.createPage({
     path: node.path,

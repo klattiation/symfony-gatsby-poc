@@ -4,7 +4,8 @@ import get from "lodash/get"
 import Layout from "../components/layout"
 
 const getTitle = data => get(data, "corePageAuthors.content.title")
-const getAuthors = data => get(data, "corePageAuthors.content.authors", [])
+const getAuthors = data =>
+  get(data, "corePageAuthors.relationships.authors", [])
 const getAuthorName = content =>
   content.type === "person"
     ? `${content.firstName} ${content.lastName}`
@@ -40,6 +41,8 @@ export const query = graphql`
       }
       content {
         title
+      }
+      relationships {
         authors {
           id
           path

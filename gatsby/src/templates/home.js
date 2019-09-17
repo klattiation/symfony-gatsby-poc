@@ -3,8 +3,8 @@ import { graphql, Link } from "gatsby"
 import get from "lodash/get"
 import Layout from "../components/layout"
 
-const getModules = data => get(data, "corePageHome.content.modules", [])
-const getMedias = data => get(data, "corePageHome.content.medias", [])
+const getModules = data => get(data, "corePageHome.relationships.modules", [])
+const getMedias = data => get(data, "corePageHome.relationships.medias", [])
 const getTitle = data => get(data, "corePageHome.content.title")
 const getDescription = data => get(data, "corePageHome.content.description")
 const getMediasTitle = data => get(data, "corePageHome.content.mediasTitle")
@@ -49,6 +49,8 @@ export const query = graphql`
         title
         description
         mediasTitle
+      }
+      relationships {
         medias {
           id
           path

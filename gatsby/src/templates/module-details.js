@@ -24,17 +24,6 @@ export const query = graphql`
         name
         imagePath
         description
-        chapters
-        authorsDescription
-        authors {
-          content {
-            firstName
-            lastName
-            imagePath
-            organisationName
-            type
-          }
-        }
       }
       seo {
         metaTags {
