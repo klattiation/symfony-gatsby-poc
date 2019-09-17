@@ -19,9 +19,24 @@ The component structure follows best practices described in this [blog post](htt
 Each component lives in its own directory and consist of:
 
 - **`index.js`**: Enables easy imports, exports the top-most component js file.
-- **`component-name.view.js`**: Stateless view component
-- **`component-name.container.js`**: Contains the business logic and state management as handled before being sent to the stateless view component.
+- **`component-name.container.tsx`**: Contains the business logic and state management as handled before being sent to the stateless view component.
+- **`component-name.container.test.tsx`**: Contains tests for the container.
+- **`component-name.view.tsx`**: Stateless view component
+- **`component-name.view.test.tsx`**: Contains tests for the view component.
 - **`component-name.module.scss`**: SCSS module, imported by the stateless view component.
+
+## npm scripts
+
+- **`npm run build`**: builds the production-ready app into the public folder
+- **`npm run clean`**: removes gatsby-generated files and folders like `.cache` and `public`
+- **`npm run format`**: runs prettier
+- **`npm run lint`**: runs tslint to make sure all the rules we specified in the [tslint.json](../gatsby/tslint.json)
+- **`npm run mockserver`**: starts the mockserver on port 3000
+- **`npm run serve`**: starts the app production app port 9000
+- **`npm run start`**: starts the app in dev mode on port 8000
+- **`npm run playground`**: same as `start` but with fancy GraphiQL interface
+- **`npm run test`**: runs (non-existent) unit tests
+- **`npm run type-check`**: ensures you have no conflicts in your types
 
 ## File structure
 
@@ -77,6 +92,8 @@ A quick look at the top-level files and directories you'll see in a Gatsby proje
 
 1.  **`.prettierrc`**: This is a configuration file for [Prettier](https://prettier.io/). Prettier is a tool to help keep the formatting of your code consistent.
 
+1.  **`declarations.d.ts`**: Global declarations (necessary to allow scss imports).
+
 1.  **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.org/docs/browser-apis/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
 
 1.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.org/docs/gatsby-config/) for more detail).
@@ -88,6 +105,10 @@ A quick look at the top-level files and directories you'll see in a Gatsby proje
 1.  **`package-lock.json`** (See `package.json` below, first). This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(You won’t change this file directly).**
 
 1.  **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the project’s name, author, etc). This manifest is how npm knows which packages to install for your project.
+
+1.  **`tsconfig.json`**: TypeScript configurations. Sets up the compiler options, and which folder to include or exclude in when it comes to compiling TypeScript files.
+
+1.  **`tslint.json`**: This config will contain the linting rules for our TypeScript codebase.
 
 ## Build process
 

@@ -14,6 +14,8 @@
     "gatsby-plugin-react-helmet": "^3.1.6",
     "gatsby-plugin-sass": "^2.1.14",
     "gatsby-plugin-sharp": "^2.2.20",
+    "gatsby-plugin-tslint": "0.0.2",
+    "gatsby-plugin-typescript": "^2.1.8",
     "gatsby-source-filesystem": "^2.1.21",
     "gatsby-transformer-sharp": "^2.2.13",
     "lodash": "^4.17.15",
@@ -24,23 +26,36 @@
     "react-helmet": "^5.2.1"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.138",
+    "@types/node": "^12.7.5",
+    "@types/node-sass": "^4.11.0",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-helmet": "^5.0.10",
     "casual": "^1.6.2",
     "colors": "^1.3.3",
     "json-server": "^0.15.1",
     "prettier": "^1.18.2",
-    "rendum": "github:klattiation/rendum"
+    "rendum": "github:klattiation/rendum",
+    "tslint": "^5.20.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-loader": "^3.5.4",
+    "tslint-plugin-prettier": "^2.0.1",
+    "tslint-react": "^4.1.0",
+    "typescript": "^3.6.3"
   },
   "license": "LicenseRef-LICENSE",
   "scripts": {
     "build": "gatsby build",
-    "develop": "gatsby develop",
     "clean": "gatsby clean",
-    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "lint": "tslint --project .",
+    "mockserver": "json-server mockserver/mocks/index.js --middlewares mockserver/middlewares/jsonapi.js --watch",
+    "serve": "gatsby serve",
     "start": "gatsby develop",
     "playground": "GATSBY_GRAPHQL_IDE=playground gatsby develop",
-    "serve": "gatsby serve",
-    "mockserver": "json-server mockserver/mocks/index.js --middlewares mockserver/middlewares/jsonapi.js --watch",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \""
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \"",
+    "type-check": "tsc --noEmit"
   },
   "repository": {
     "type": "git",

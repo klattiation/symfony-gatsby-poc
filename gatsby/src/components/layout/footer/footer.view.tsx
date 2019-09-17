@@ -1,10 +1,10 @@
-import { useStaticQuery, graphql } from "gatsby"
+import { graphql, useStaticQuery } from "gatsby"
 import React from "react"
 import get from "lodash/get"
 import Link from "../../link"
 import styles from "./footer.module.scss"
 
-const getLinks = data => [
+const getLinks = (data: any) => [
   {
     label: "Impressum",
     path: get(data, "corePageImprint.path"),

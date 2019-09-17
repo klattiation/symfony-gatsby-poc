@@ -5,24 +5,19 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from "react"
-import PropTypes from "prop-types"
+import React, { FunctionComponent } from "react"
 import Header from "./header/header.view"
 import Footer from "./footer/footer.view"
 
 import "../../styles/_base.scss"
 import styles from "./layout.module.scss"
 
-const Layout = ({ children }) => (
+const Layout: FunctionComponent = ({ children }) => (
   <>
     <Header />
     <main className={styles.content}>{children}</main>
     <Footer />
   </>
 )
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-}
 
 export default Layout

@@ -5,7 +5,16 @@ module.exports = {
     author: `Sascha Klatt`,
   },
   plugins: [
-    `gatsby-plugin-source-virtual-academy-api`,
+    {
+      resolve: `gatsby-plugin-source-virtual-academy-api`,
+      options: {
+        isTSX: true, // defaults to false
+        jsxPragma: `jsx`, // defaults to "React"
+        allExtensions: true, // defaults to false
+      },
+    },
+    `gatsby-plugin-typescript`,
+    `gatsby-plugin-tslint`,
     `gatsby-plugin-sass`,
     `gatsby-plugin-react-helmet`,
     {

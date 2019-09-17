@@ -4,9 +4,9 @@ import get from "lodash/get"
 import Link from "../../link"
 import styles from "./header.module.scss"
 
-const getPathHome = data => get(data, "corePageHome.path")
+const getPathHome = (data: any) => get(data, "corePageHome.path")
 
-const getLinks = data => [
+const getLinks = (data: any) => [
   {
     label: "Autor*innen",
     path: get(data, "corePageAuthors.path"),
