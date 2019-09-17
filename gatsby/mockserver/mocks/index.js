@@ -10,6 +10,7 @@ const {
 const { randomEntries, randomInt } = require("rendum")
 const compose = require("lodash/fp/compose")
 const generateAuthors = require("./authors")
+const generateDocuments = require("./documents")
 const generateMedias = require("./medias")
 const generateModules = require("./modules")
 const generateTags = require("./tags")
@@ -51,12 +52,13 @@ const countModules = modulesBase => get(modulesBase, "length", 0)
 module.exports = () => {
   // generate entities in base format (without any relations)
   const allMediasBase = generateMedias({ count: 100 })
+  const allDocumentsBase = generateDocuments({ count: 300 })
   const allAuthorsBase = generateAuthors({ count: 20 })
   const allModulesBase = generateModules()
   const allTagsBase = generateTags({ count: 20 })
-  const allChapterTypes = generateChapterTypes()
+  const allChapterTypesBase = generateChapterTypes()
   const chaptersPerModule = generateChaptersPerModule({
-    chapterTypes: allChapterTypes,
+    chapterTypes: allChapterTypesBase,
     moduleCount: countModules(allModulesBase),
   })
   const allChaptersBase = flatten(chaptersPerModule)
@@ -70,12 +72,13 @@ module.exports = () => {
 
   // extract ids
   const allAuthorIds = extractIds(allAuthorsBase)
+  const allDocumentIds = extractIds(allDocumentsBase)
   const allMediaIds = extractIds(allMediasBase)
   const allModuleIds = extractIds(allModulesBase)
   const allTagIds = extractIds(allTagsBase)
-  const allChapterTypeIds = extractIds(allChapterTypes)
+  const allChapterTypeIds = extractIds(allChapterTypesBase)
 
-  // make enhancers to add relations
+  // make enhancers to add relationships
   const addRandomMediaIds = makeEntityEnhancer(
     allMediaIds,
     "relationships.medias"
@@ -89,6 +92,10 @@ module.exports = () => {
     "relationships.modules"
   )
   const addRandomTagIds = makeEntityEnhancer(allTagIds, "relationships.tags")
+  const addRandomDocumentIds = makeEntityEnhancer(
+    allDocumentIds,
+    "relationships.documents"
+  )
   const addAllTagIds = addRandomTagIds("all")
   const addAllModuleIds = addRandomModuleIds("all")
   const addAllAuthorIds = addRandomAuthorIds("all")
@@ -112,12 +119,15 @@ module.exports = () => {
 
     chapters: addRandomMediaIds({ min: 0, max: 10 })(allChaptersBase),
 
-    "chapter-types": allChapterTypes,
+    "chapter-types": allChapterTypesBase,
+
+    documents: allDocumentsBase,
 
     medias: compose(
       addRandomAuthorIds({ min: 1, max: 3 }),
       addRandomModuleIds({ min: 1, max: 3 }),
-      addRandomTagIds({ min: 0, max: 10 })
+      addRandomTagIds({ min: 0, max: 10 }),
+      addRandomDocumentIds({ min: 1, max: 10 })
     )(allMediasBase),
 
     modules: compose(

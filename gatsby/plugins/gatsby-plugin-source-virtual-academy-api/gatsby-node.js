@@ -55,12 +55,12 @@ const resolveRelation = relField => entity => {
 
 const nodeFactory = createNode => ({
   nodeType,
-  relationFields = [],
+  relationships = [],
 }) => resource => {
   createNode({
     ...resource,
     relationships: {
-      ...compose(relationFields.map(resolveRelation))(resource.relationships),
+      ...compose(relationships.map(resolveRelation))(resource.relationships),
     },
     parent: null,
     children: [],
@@ -77,6 +77,7 @@ exports.sourceNodes = async ({ actions }) => {
     authors,
     chapters,
     chapterTypes,
+    documents,
     medias,
     modules,
     tags,
@@ -91,6 +92,7 @@ exports.sourceNodes = async ({ actions }) => {
     fetchResources(`${MOCKSERVER_URL}/authors`),
     fetchResources(`${MOCKSERVER_URL}/chapters`),
     fetchResources(`${MOCKSERVER_URL}/chapter-types`),
+    fetchResources(`${MOCKSERVER_URL}/documents`),
     fetchResources(`${MOCKSERVER_URL}/medias`),
     fetchResources(`${MOCKSERVER_URL}/modules`),
     fetchResources(`${MOCKSERVER_URL}/tags`),
@@ -116,7 +118,7 @@ exports.sourceNodes = async ({ actions }) => {
   authors.forEach(
     makeNodeCreator({
       nodeType: "Author",
-      relationFields: ["modules", "medias"],
+      relationships: ["modules", "medias"],
     })
   )
 
@@ -132,17 +134,23 @@ exports.sourceNodes = async ({ actions }) => {
     })
   )
 
+  documents.forEach(
+    makeNodeCreator({
+      nodeType: "Document",
+    })
+  )
+
   medias.forEach(
     makeNodeCreator({
       nodeType: "Media",
-      relationFields: ["authors", "tags", "modules"],
+      relationships: ["authors", "documents", "modules", "tags"],
     })
   )
 
   modules.forEach(
     makeNodeCreator({
       nodeType: "Module",
-      relationFields: ["authors"],
+      relationships: ["authors"],
     })
   )
 
@@ -154,12 +162,12 @@ exports.sourceNodes = async ({ actions }) => {
 
   makeNodeCreator({
     nodeType: "CorePageHome",
-    relationFields: ["modules", "medias"],
+    relationships: ["modules", "medias"],
   })(pageHome)
 
   makeNodeCreator({
     nodeType: "CorePageMedias",
-    relationFields: ["authors", "tags", "modules", "medias"],
+    relationships: ["authors", "tags", "modules", "medias"],
   })(pageMedias)
 
   makeNodeCreator({
@@ -168,7 +176,7 @@ exports.sourceNodes = async ({ actions }) => {
 
   makeNodeCreator({
     nodeType: "CorePageAuthors",
-    relationFields: ["authors"],
+    relationships: ["authors"],
   })(pageAuthors)
 
   makeNodeCreator({
