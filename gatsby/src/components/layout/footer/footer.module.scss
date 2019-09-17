@@ -1,0 +1,13 @@
+@import "../../../styles/variables";
+
+.footer {
+  background: $colorPrimary;
+  margin: 0 auto;
+  margin-top: 1.45rem;
+  max-width: 960;
+  padding: 1.45rem 1.0875rem;
+
+  > a:not(:last-child) {
+    margin-right: 10px;
+  }
+}

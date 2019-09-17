@@ -4,6 +4,25 @@
 
 The frontend is build with the static site generator [Gatsby](https://www.gatsbyjs.org/), which is built on top of [React.js](https://reactjs.org/).
 
+## Code style
+
+Code is formatted using [Prettier](https://prettier.io). The formatting rules are defined in the [.prettierrc](../gatsby/.prettierrc) file. There are plugins for all major IDEs that perform code formatting when saving a file.
+
+## Styling
+
+We use [CSS modules](https://www.gatsbyjs.org/docs/css-modules/) and [Sass](https://www.gatsbyjs.org/docs/sass/) without any CSS frameworks.
+
+## Component structure
+
+The component structure follows best practices described in this [blog post](https://medium.com/@Charles_Stover/optimal-file-structure-for-react-applications-f3e35ad0a145).
+
+Each component lives in its own directory and consist of:
+
+- **`index.js`**: Enables easy imports, exports the top-most component js file.
+- **`component-name.view.js`**: Stateless view component
+- **`component-name.container.js`**: Contains the business logic and state management as handled before being sent to the stateless view component.
+- **`component-name.module.scss`**: SCSS module, imported by the stateless view component.
+
 ## File structure
 
 A quick look at the top-level files and directories you'll see in a Gatsby project.
@@ -16,6 +35,7 @@ A quick look at the top-level files and directories you'll see in a Gatsby proje
     └── src
         ├── components
         ├── pages
+        └── style
         └── templates
     ├── static
     ├── .gitignore
@@ -45,6 +65,8 @@ A quick look at the top-level files and directories you'll see in a Gatsby proje
 
   - **`/templates`**: Contains templates for programmatically creating pages. Check out the [templates docs](https://www.gatsbyjs.org/docs/building-with-components/#page-template-components) for more detail.
 
+  - **`/styles`**: Contains global styles, style normalisations and variables.
+
   - **`html.js`**: For custom configuration of default .cache/default_html.js. Check out the [custom html docs](https://www.gatsbyjs.org/docs/custom-html/) for more detail.
 
 1.  **`/static`**: If you put a file into the static folder, it will not be processed by Webpack. Instead it will be copied into the public folder untouched. Check out the [assets docs](https://www.gatsbyjs.org/docs/static-folder/#adding-assets-outside-of-the-module-system) for more detail.
@@ -71,10 +93,21 @@ A quick look at the top-level files and directories you'll see in a Gatsby proje
 
 During the build process Gatsby fetches all data necessary to generate all static sites. The fetched data is stored in an internal store which can be queried with [GraphQL](https://graphql.org).
 
-## 🎓 Learning Gatsby
+Start local development on http://localhost:8000 with (use one terminal for each command):
 
-Looking for more guidance? Full documentation for Gatsby lives [on the website](https://www.gatsbyjs.org/). Here are some places to start:
+```
+make start-mockserver
+make start-frontend-dev
+```
 
-- **For most developers, we recommend starting with our [in-depth tutorial for creating a site with Gatsby](https://www.gatsbyjs.org/tutorial/).** It starts with zero assumptions about your level of ability and walks through every step of the process.
+To generate a production-ready build run:
 
-- **To dive straight into code samples, head [to our documentation](https://www.gatsbyjs.org/docs/).** In particular, check out the _Guides_, _API Reference_, and _Advanced Tutorials_ sections in the sidebar.
+```
+make build-frontend-prod
+```
+
+Test the build on http://localhost:9000 with:
+
+```
+make start-frontend-prod
+```
