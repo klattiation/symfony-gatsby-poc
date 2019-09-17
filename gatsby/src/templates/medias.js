@@ -48,7 +48,7 @@ export const query = graphql`
         modules {
           id
           content {
-            name
+            title
           }
         }
         medias {

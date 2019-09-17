@@ -1,15 +1,14 @@
 import React from "react"
-import { graphql, Link } from "gatsby"
+import { graphql } from "gatsby"
 import Layout from "../components/layout"
 
 export default ({ data }) => {
-  const { id, content } = data.module
+  const { content } = data.module
   return (
     <Layout>
-      <h2>{content.name}</h2>
-      <sub>{id}</sub>
+      <h2>{content.title}</h2>
+      <h3>{content.subline}</h3>
       <p>{content.description}</p>
-      <Link to="/">Home</Link>
     </Layout>
   )
 }
@@ -21,7 +20,7 @@ export const query = graphql`
       content {
         vimeoId
         subline
-        name
+        title
         imagePath
         description
       }

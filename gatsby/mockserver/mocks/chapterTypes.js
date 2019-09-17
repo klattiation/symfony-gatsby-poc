@@ -3,12 +3,12 @@ const casual = require("casual").de_DE
 module.exports = () => [
   {
     id: casual.uuid,
-    name: "Hintergrund",
+    title: "Hintergrund",
     description: casual.description,
   },
   {
     id: casual.uuid,
-    name: "Praxis",
+    title: "Praxis",
     description: casual.description,
   },
 ]

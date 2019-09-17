@@ -4,7 +4,7 @@ module.exports = () => [
   {
     id: casual.uuid,
     content: {
-      name: "Demokratie",
+      title: "Demokratie",
       subline: "Radikalisiert euch",
       description: casual.description,
       imagePath: "/images/modul-demokratie.jpg",
@@ -29,7 +29,7 @@ module.exports = () => [
   {
     id: casual.uuid,
     content: {
-      name: "Religionen",
+      title: "Religionen",
       subline: "Subline zu Religionen",
       description: casual.description,
       imagePath: "/images/modul-religionen.jpg",
@@ -54,7 +54,7 @@ module.exports = () => [
   {
     id: casual.uuid,
     content: {
-      name: "Rassismus",
+      title: "Rassismus",
       subline: "Subline zu Rassismus",
       description: casual.description,
       imagePath: "/images/modul-rassismus.jpg",
@@ -79,7 +79,7 @@ module.exports = () => [
   {
     id: casual.uuid,
     content: {
-      name: "Rassismus",
+      title: "Rassismus",
       subline: "Subline zu Diversität",
       description: casual.description,
       imagePath: "/images/modul-diversitaet.jpg",

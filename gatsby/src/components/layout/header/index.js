@@ -2,6 +2,7 @@ import { Link, useStaticQuery, graphql } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
 import get from "lodash/get"
+import styles from "./header.module.scss"
 
 const linkStyle = {
   color: `white`,
@@ -45,20 +46,9 @@ const Header = ({ siteTitle }) => {
   `)
 
   return (
-    <header
-      style={{
-        background: `rebeccapurple`,
-        marginBottom: `1.45rem`,
-      }}
-    >
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `1.45rem 1.0875rem`,
-        }}
-      >
-        <h1 style={{ margin: 0 }}>
+    <header className={styles.header}>
+      <div>
+        <h1>
           <Link to={getPathHome(data)} style={linkStyle}>
             {siteTitle}
           </Link>

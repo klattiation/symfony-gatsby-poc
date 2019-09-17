@@ -16,7 +16,7 @@ export default ({ data }) => (
         {getModules(data).map(({ id, path, content }) => (
           <li key={id}>
             <Link to={path}>
-              <h3>{content.name}</h3>
+              <h3>{content.title}</h3>
               <p>{content.subline}</p>
             </Link>
           </li>
@@ -65,7 +65,7 @@ export const query = graphql`
           id
           path
           content {
-            name
+            title
             subline
             imagePath
           }

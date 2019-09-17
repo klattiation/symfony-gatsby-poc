@@ -1,5 +1,5 @@
 import React from "react"
-import { graphql, Link } from "gatsby"
+import { graphql } from "gatsby"
 import Layout from "../components/layout"
 
 export default ({ data }) => {
@@ -9,7 +9,6 @@ export default ({ data }) => {
       <h2>{content.title}</h2>
       <sub>{id}</sub>
       <p>{content.description}</p>
-      <Link to="/">Home</Link>
     </Layout>
   )
 }

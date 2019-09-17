@@ -86,7 +86,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/filterModule"
         - $ref: "#/components/parameters/pageOffset"
-        - $ref: "#/components/parameters/showDetails"
 
       responses:
         "200":
@@ -101,9 +100,7 @@ paths:
                   data:
                     type: array
                     items:
-                      oneOf:
-                        - $ref: "#/components/schemas/AuthorPreview"
-                        - $ref: "#/components/schemas/Author"
+                      $ref: "#/components/schemas/Author"
         "400":
           description: Invalid request.
           content:
@@ -144,7 +141,6 @@ paths:
         - $ref: "#/components/parameters/sortField"
         - $ref: "#/components/parameters/sortOrder"
         - $ref: "#/components/parameters/pageOffset"
-        - $ref: "#/components/parameters/showDetails"
       responses:
         "200":
           description: Successful operation.
@@ -158,9 +154,7 @@ paths:
                   data:
                     type: array
                     items:
-                      oneOf:
-                        - $ref: "#/components/schemas/MediaPreview"
-                        - $ref: "#/components/schemas/Media"
+                      $ref: "#/components/schemas/Media"
         "400":
           description: Invalid request
           content:
@@ -241,25 +235,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/BadRequest"
 
-  /pages:
-    get:
-      tags:
-        - pages
-      summary: Get pages
-      description: Lists **all core pages**, excluding author, media and module details pages. This endpoint is used during the frontend build process to fetch the data for all core pages in one request.
-      responses:
-        "200":
-          description: Successful operation.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/CorePage"
-
   /pages/home:
     get:
       tags:
@@ -288,21 +263,27 @@ paths:
                               description:
                                 type: string
                                 example: "Dominierende Elemente des Entwurfs sind markante Fotos und klare Typografie in übersichtlichen Kompositionen, die an ein Magazin-Layout erinnert. Jedes Thema..."
-                              modulesPreview:
+                              mediasTitle:
+                                type: string
+                                example: "Neue Mediabeiträge"
+                          relationships:
+                            type: object
+                            properties:
+                              modules:
                                 type: array
                                 items:
-                                  $ref: "#/components/schemas/ModulePreview"
+                                  type: string
                               mediasPreview:
                                 type: array
                                 items:
-                                  $ref: "#/components/schemas/MediaPreview"
+                                  type: string
 
   /pages/medias:
     get:
       tags:
         - pages
-      summary: Get media page
-      description: Get the path, seo and content of the media overview page. The content includes all authors, modules and chapters with preview data as well as all tags to generate the filter section. Also all medias that should be visible when the page loads are provided as preview data.
+      summary: Get medias page
+      description: Get the path, seo, content and relationships of the **media overview page**. The content includes all authors, modules and chapters with preview data as well as all tags to generate the filter section. Also all medias that should be visible when the page loads are provided as preview data.
       responses:
         "200":
           description: Successful operation.
@@ -322,33 +303,58 @@ paths:
                               title:
                                 type: string
                                 example: "Mediaübersicht"
-                              authorsPreview:
+                              tagsTitle:
+                                type: string
+                                example: "Tags"
+                              sortLabel:
+                                type: string
+                                example: "Sortieren"
+                              sortLabelAlpha:
+                                type: string
+                                example: "A-Z"
+                              sortLabelDate:
+                                type: string
+                                example: "Datum"
+                              sort:
+                                type: string
+                                enum:
+                                  - title
+                                  - date
+                              order:
+                                type: string
+                                enum:
+                                  - asc
+                                  - desc
+                          relationships:
+                            type: object
+                            properties:
+                              authors:
                                 type: array
                                 items:
-                                  $ref: "#/components/schemas/AuthorPreview"
-                              modulesPreview:
+                                  type: string
+                              chapterTypes:
                                 type: array
                                 items:
-                                  $ref: "#/components/schemas/ModulePreview"
-                              chaptersPreview:
+                                  type: string
+                              medias:
                                 type: array
                                 items:
-                                  $ref: "#/components/schemas/ChapterPreview"
-                              mediasPreview:
+                                  type: string
+                              modules:
                                 type: array
                                 items:
-                                  $ref: "#/components/schemas/MediaPreview"
+                                  type: string
                               tags:
                                 type: array
                                 items:
-                                  $ref: "#/components/schemas/Tag"
+                                  type: string
 
   /pages/authors:
     get:
       tags:
         - pages
       summary: Get authors page
-      description: Get the path and content of the author overview page.
+      description: Get the path, content, seo and relations of the **author overview** page.
       responses:
         "200":
           description: Successful operation.
@@ -368,6 +374,13 @@ paths:
                               title:
                                 type: string
                                 example: "Autorenübersicht"
+                          relationships:
+                            type: object
+                            properties:
+                              authors:
+                                type: array
+                                items:
+                                  type: string
 
   /pages/about:
     get:
@@ -397,7 +410,10 @@ paths:
                               description:
                                 type: string
                                 example: "Lorem ipsum dolor sit amet, consetetur..."
-                              team:
+                              teamTitle:
+                                type: string
+                                example: "Team"
+                              teamList:
                                 type: array
                                 items:
                                   type: object
@@ -408,6 +424,24 @@ paths:
                                     imagePath:
                                       type: string
                                       example: "/assets/img/maxmustermann.jpg"
+                              contactTitle:
+                                type: string
+                                example: "Kontakt"
+                              contactLabelName:
+                                type: string
+                                example: "Name"
+                              contactLabelCompany:
+                                type: string
+                                example: "Unternehmen / Organisation"
+                              contactLabelEmail:
+                                type: string
+                                example: "E-Mail Adresse"
+                              contactLabelMessage:
+                                type: string
+                                example: "Nachricht"
+                              contactLabelSubmit:
+                                type: string
+                                example: "Absenden"
 
   /pages/imprint:
     get:
@@ -469,66 +503,6 @@ paths:
 
 components:
   schemas:
-    Media:
-      type: object
-      properties:
-        id:
-          type: string
-        content:
-          type: object
-          properties:
-            title:
-              type: string
-            subline:
-              type: string
-            imagePath:
-              type: string
-            description:
-              type: string
-            date:
-              type: string
-              example: "2019-08-20"
-            documents:
-              type: array
-              items:
-                $ref: "#/components/schemas/Document"
-            authors:
-              type: array
-              items:
-                $ref: "#/components/schemas/AuthorPreview"
-            tags:
-              type: array
-              items:
-                $ref: "#/components/schemas/Tag"
-            modules:
-              type: array
-              items:
-                $ref: "#/components/schemas/ModulePreview"
-        path:
-          type: string
-        seo:
-          $ref: "#/components/schemas/PageSeo"
-
-    MediaPreview:
-      type: object
-      properties:
-        id:
-          type: string
-        content:
-          type: object
-          properties:
-            title:
-              type: string
-            subline:
-              type: string
-            imagePath:
-              type: string
-            date:
-              type: string
-              example: "2019-08-20"
-        path:
-          type: string
-
     Author:
       type: object
       properties:
@@ -567,114 +541,34 @@ components:
               type: string
             imagePath:
               type: string
-            mediasPreview:
+        relationships:
+          type: object
+          properties:
+            modules:
               type: array
               items:
-                $ref: "#/components/schemas/MediaPreview"
-            modulesPreview:
+                type: string
+            medias:
               type: array
               items:
-                $ref: "#/components/schemas/ModulePreview"
+                type: string
         path:
           type: string
         seo:
           $ref: "#/components/schemas/PageSeo"
 
-    AuthorPreview:
+    BadRequest:
       type: object
       properties:
-        id:
+        message:
           type: string
-        content:
-          type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - person
-                - organisation
-            firstName:
-              type: string
-              example: Max
-            lastName:
-              type: string
-              example: Mustermann
-            organisationName:
-              type: string
-            position:
-              type: string
-              example: Gymnasiallehrer
-            imagePath:
-              type: string
-        path:
-          type: string
-          example: "/autoren/max-mustermann"
-
-    Module:
-      type: object
-      properties:
-        id:
-          type: string
-        content:
-          type: object
-          properties:
-            name:
-              type: string
-              example: Demokratie
-            subline:
-              type: string
-              example: Radikalisiert euch!
-            description:
-              type: string
-            imagePath:
-              type: string
-              example: "/images/module-x.jpg"
-            vimeoId:
-              type: string
-              example: "oa12af34"
-            authorsDescription:
-              type: string
-            authorsPreview:
-              type: array
-              items:
-                $ref: "#/components/schemas/AuthorPreview"
-            chapters:
-              type: array
-              items:
-                $ref: "#/components/schemas/Chapter"
-        path:
-          type: string
-          example: "/modul/demokratie"
-        seo:
-          $ref: "#/components/schemas/PageSeo"
-
-    ModulePreview:
-      type: object
-      properties:
-        id:
-          type: string
-        content:
-          type: object
-          properties:
-            name:
-              type: string
-              example: Demokratie
-            subline:
-              type: string
-              example: Radikalisiert euch!
-            imagePath:
-              type: string
-              example: "/images/module-x.jpg"
-        path:
-          type: string
-          example: "/modul/demokratie"
 
     ChapterType:
       type: object
       properties:
         id:
           type: string
-        name:
+        title:
           type: string
         description:
           type: string
@@ -684,33 +578,35 @@ components:
       properties:
         id:
           type: string
-        type:
-          $ref: "#/components/schemas/ChapterType"
-        mediasPreview:
-          type: array
-          items:
-            $ref: "#/components/schemas/MediaPreview"
+        relationships:
+          type: object
+          properties:
+            chapterType:
+              type: string
+            medias:
+              type: array
+              items:
+                type: string
 
-    ChapterPreview:
+    CorePage:
       type: object
       properties:
         id:
           type: string
-        name:
+        path:
           type: string
-
-    BadRequest:
-      type: object
-      properties:
-        message:
-          type: string
+          example: "/medias"
+        seo:
+          $ref: "#/components/schemas/PageSeo"
+        content:
+          type: object
 
     Document:
       type: object
       properties:
         id:
           type: string
-        name:
+        title:
           type: string
           example: "Lernmaterial"
         mimeType:
@@ -726,14 +622,48 @@ components:
           type: string
           example: "/dokumente/lernmaterial.pdf"
 
-    Tag:
+    Media:
       type: object
       properties:
         id:
           type: string
-        name:
+        content:
+          type: object
+          properties:
+            title:
+              type: string
+            subline:
+              type: string
+            imagePath:
+              type: string
+            description:
+              type: string
+            date:
+              type: string
+              example: "2019-08-20"
+        relationships:
+          type: object
+          properties:
+            documents:
+              type: array
+              items:
+                type: string
+            authors:
+              type: array
+              items:
+                type: string
+            tags:
+              type: array
+              items:
+                type: string
+            modules:
+              type: array
+              items:
+                type: string
+        path:
           type: string
-          example: "Langer Hashtag"
+        seo:
+          $ref: "#/components/schemas/PageSeo"
 
     MetaTag:
       type: object
@@ -745,18 +675,48 @@ components:
           type: string
           example: "This is the home of the Adb Virtual Academy."
 
-    CorePage:
+    Module:
       type: object
       properties:
         id:
           type: string
-        path:
-          type: string
-          example: "/medias"
-        seo:
-          $ref: "#/components/schemas/PageSeo"
         content:
           type: object
+          properties:
+            title:
+              type: string
+              example: Demokratie
+            subline:
+              type: string
+              example: Radikalisiert euch!
+            description:
+              type: string
+            imagePath:
+              type: string
+              example: "/images/module-x.jpg"
+            vimeoId:
+              type: string
+              example: "oa12af34"
+            authorsDescription:
+              type: string
+
+        relationships:
+          type: object
+          properties:
+            chapters:
+              type: array
+              items:
+                type: string
+            authorsPreview:
+              type: array
+              items:
+                type: string
+
+        path:
+          type: string
+          example: "/modul/demokratie"
+        seo:
+          $ref: "#/components/schemas/PageSeo"
 
     PageSeo:
       type: object
@@ -776,6 +736,15 @@ components:
           type: integer
         prev:
           type: integer
+
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+          example: "Langer Hashtag"
 
   requestBodies:
     Contact:
